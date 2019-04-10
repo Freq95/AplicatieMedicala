@@ -1,9 +1,9 @@
 class Programare:
-    def __init__ (self, tratament, pdf, radiografie, id_pacient):
+    def __init__ (self, tratament, pdf, radiografie, numePacient):
         self.tratament = tratament
         self.pdf = pdf
         self.radiografie = radiografie
-        self.id_pacient = id_pacient
+        self.numePacient = numePacient
 
     #def setNume(self, noulNume):
     #    self.nume = noulNume

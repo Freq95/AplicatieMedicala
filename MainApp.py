@@ -1,4 +1,4 @@
-# TO-DO: make an executable for test
+# TO-DO: make an executable for test --->>> [done once - it works but the code had some errors]
 # nu lasa introducerea multipla a aceleiasi persoane
 # !!!! repara introducerea de pdf in baza de date - check -  daca e necesar sa-l introduci sau e dee ajuns sa-l salvvezi local in proiect, same shit si cu imaginea + adauga data
 import ClasaDB
@@ -6,22 +6,34 @@ import ClasaPacienti
 import ClasaProgramari
 import os
 import PyPDF2
-
 from PIL import Image
-
-import Tkinter
-import tkFileDialog
+import tkinter
+from tkinter import filedialog
+import webbrowser as wb
 
 def mainApplication():
-    Pacient = ClasaPacienti.Pacient('Marinica', 'Novac', '23', 'M')
+    Pacient = ClasaPacienti.Pacient('Ion', 'Doi', '23', 'M')
 
     PacientDB = ClasaDB.BazaDate()
     PacientDB.create_table()
-    PacientDB.introducere_pacient_db(Pacient)
+
+    # verificare daca exista pacient cu acelasi nume in DB
+    existaPacient = PacientDB.CheckExistentaPacientInDB('Dolanescu', 'Doi')
+
+
+    #Introducere in baza de date
+    if existaPacient:
+        print('Pacientul nu a fost introdus.')
+    else:
+        PacientDB.introducere_pacient_db(Pacient)
 
     #PacientDB.afisare_tabel()
 
-    PacientDB.cautare_pacient_DB('Paul')
+    # cautare pacient
+    #PacientDB.cautare_prenume_pacient_DB('Marinica')
+    #PacientDB.cautare_nume_pacient_DB('Novac')
+
+
     PacientDB.close_DB()
 
     # print(Pacient.getNume())
@@ -49,28 +61,36 @@ def formularPacient():
 
 
     ##-------------- Adaugare Programare --------------##
-    tratament = raw_input("tratament: ")
-    id_pacient = raw_input("id_pacient: ")
+    tratament = input("Tratament: ")
+    numePacient = input("Nume Pacient: ")
 
-    #PDF citire
-    Tkinter.Tk().withdraw()  # Close the root window
-    in_path = tkFileDialog.askopenfilename(title = "Select file",filetypes = (("pdf files","*.pdf"),("all files","*.*")))
-    print in_path
+    ##PDF citire ====================================
+    tkinter.Tk().withdraw()  # Close the root window
+    in_path = filedialog.askopenfilename(title = "Select file",filetypes = (("pdf files","*.pdf"),("all files","*.*")))
 
-    objPDF = open(in_path, 'rb')
-    pdf = PyPDF2.PdfFileReader(objPDF)
-    print(pdf.numPages)
-    os.startfile(in_path)
 
-    #Radiografie citire + afisare
-    Tkinter.Tk().withdraw()  # Close the root window
-    in_path1 = tkFileDialog.askopenfilename(title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
-    print in_path1
-    radiografie = Image.open(in_path1).convert('L')
-    radiografie.show()
+    ##Simply opens a pdf ====================================
+    #wb.open_new(r'D:\__AplicatieMedicala\exemple.pdf')
+
+    # print(in_path)
+
+    ## deschidere pdf
+    #objPDF = open(in_path, 'rb')
+    #pdf = PyPDF2.PdfFileReader(objPDF)
+    #print(pdf.numPages)
+    #os.startfile(in_path)
+
+    #Radiografie citire + afisare ====================================
+    tkinter.Tk().withdraw()  # Close the root window
+    in_path1 = filedialog.askopenfilename(title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+    print(in_path1)
+
+    #Afisare radiografie
+    #radiografie = Image.open(in_path1).convert('L')
+    #radiografie.show()
 
     #Adaugare programare noua
-    newProgramare = ClasaProgramari.Programare(tratament, pdf, radiografie, id_pacient)
+    newProgramare = ClasaProgramari.Programare(tratament, in_path, in_path1, numePacient)
     DataBase.introducere_programare_db(newProgramare)
 
     DataBase.close_DB()
@@ -78,5 +98,6 @@ def formularPacient():
 
 if __name__ == '__main__':
 
+    mainApplication()
+    #formularPacient()
 
-    formularPacient()

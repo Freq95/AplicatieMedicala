@@ -32,10 +32,10 @@ class BazaDate(ClasaPacienti.Pacient):
         self.cursorProgramari.execute('CREATE TABLE IF NOT EXISTS programariDB\
                                       (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
                                       Tratament TEXT,\
-                                      PDF BLOB,\
-                                      Radiografie BLOB,\
-                                      Pacient_id INTEGER NOT NULL,\
-                                      FOREIGN KEY(Pacient_id) REFERENCES pacientiDB(ID))')
+                                      PDF TEXT,\
+                                      Radiografie TEXT,\
+                                      Nume_Pacient TEXT NOT NULL,\
+                                      FOREIGN KEY(Nume_Pacient) REFERENCES pacientiDB(ID))')
 
 
     def introducere_pacient_db(self, pacient):
@@ -43,7 +43,7 @@ class BazaDate(ClasaPacienti.Pacient):
         self.conn.commit()
 
     def introducere_programare_db(self, programare): ## comm out programare.tratament
-        self.cursorProgramari.execute('''INSERT INTO programariDB(PDF, Radiografie, Pacient_id) VALUES(?, ?, ?)''', (programare.pdf, programare.radiografie, programare.id_pacient))
+        self.cursorProgramari.execute('''INSERT INTO programariDB(Tratament, PDF, Radiografie, Nume_Pacient) VALUES(?, ?, ?, ?)''', (programare.tratament, programare.pdf, programare.radiografie, programare.numePacient))
         self.connProgramari.commit()
 
     def afisare_tabel_programari(self):
@@ -60,8 +60,29 @@ class BazaDate(ClasaPacienti.Pacient):
         for row in rows:
             print(row)
 
-    def cautare_pacient_DB(self, NumeCautat):
-        self.cursor.execute("SELECT * FROM pacientiDB WHERE prenume=?", (NumeCautat,))
+    def cautare_prenume_pacient_DB(self, preumeCautat):
+        self.cursor.execute("SELECT * FROM pacientiDB WHERE prenume=?", (preumeCautat,))
+        rows = self.cursor.fetchall()
+
+        for row in rows:
+            print(row)
+
+    def CheckExistentaPacientInDB(self, prenumePacient, numePacient):
+        self.cursor.execute("SELECT * FROM pacientiDB WHERE prenume=?", (prenumePacient,))
+        flagPrenume = self.cursor.fetchall()
+
+        self.cursor.execute("SELECT * FROM pacientiDB WHERE nume=?", (numePacient,))
+        flagNume = self.cursor.fetchall()
+
+        if flagPrenume.__len__() > 0 and flagNume.__len__() > 0:
+            print('In baza de date acest pacient exista')
+            return True
+        else:
+            print('Pacient Nou')
+            return False
+
+    def cautare_nume_pacient_DB(self, numeCautat):
+        self.cursor.execute("SELECT * FROM pacientiDB WHERE prenume=?", (numeCautat,))
         rows = self.cursor.fetchall()
 
         for row in rows:
@@ -73,11 +94,3 @@ class BazaDate(ClasaPacienti.Pacient):
 
         self.cursorProgramari.close()
         self.connProgramari.close()
-
-
-
-
-
-
-
-
