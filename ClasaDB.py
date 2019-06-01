@@ -67,6 +67,15 @@ class BazaDate(ClasaPacienti.Pacient):
         for row in rows:
             print(row)
 
+    def cautare_PDF_pacient(self, numeCautat):
+        #self.cursor.execute("SELECT PDF FROM programariDB WHERE Nume_Pacient=?", (numeCautat,))
+        self.cursorProgramari.execute("SELECT PDF FROM programariDB WHERE Nume_Pacient=?", (numeCautat,))
+        rows = self.cursorProgramari.fetchall()
+        #print(rows[0])
+
+        #return rows[rows.__len__() - 1] ## returneaza ultimul pdf incarcat
+        return rows
+
     def CheckExistentaPacientInDB(self, prenumePacient, numePacient):
         self.cursor.execute("SELECT * FROM pacientiDB WHERE prenume=?", (prenumePacient,))
         flagPrenume = self.cursor.fetchall()
@@ -75,7 +84,7 @@ class BazaDate(ClasaPacienti.Pacient):
         flagNume = self.cursor.fetchall()
 
         if flagPrenume.__len__() > 0 and flagNume.__len__() > 0:
-            print('In baza de date acest pacient exista')
+            print('In baza de date acest pacient exista.')
             return True
         else:
             print('Pacient Nou')
