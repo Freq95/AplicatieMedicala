@@ -1,4 +1,4 @@
-## TO-DO:   1. Gandeste alta structura de tabele(ex: 2 tabele relationate ... fiecare pacient are mai multe inregistrari)
+## TO-DO:     1. Gandeste alta structura de tabele(ex: 2 tabele relationate ... fiecare pacient are mai multe inregistrari)
 ##            2. Adauga campuri unice
 import sqlite3
 import ClasaPacienti

@@ -4,7 +4,6 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-
     cal = QtWidgets.QCalendarWidget()
     fn = cal.font()
     fn.setPointSize(10)
