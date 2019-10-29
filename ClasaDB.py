@@ -6,7 +6,7 @@ import ClasaPacienti
 # conn = sqlite3.connect('pacienti.db')
 # c = conn.cursor()
 
-
+# prenume, nume, anul, luna, ziua, telefon, cnp,  sex
 class BazaDate(ClasaPacienti.Pacient):
     def __init__(self):
         conn = sqlite3.connect('pacienti.db')
@@ -26,24 +26,37 @@ class BazaDate(ClasaPacienti.Pacient):
         (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
         Prenume TEXT NOT NULL,\
         Nume TEXT NOT NULL,\
-        Varsta TEXT,\
+        Anul TEXT,\
+        Luna TEXT,\
+        Ziua TEXT,\
+        Telefon TEXT,\
+        CNP TEXT,\
         Sex TEXT)')
 
         self.cursorProgramari.execute('CREATE TABLE IF NOT EXISTS programariDB\
                                       (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
-                                      Tratament TEXT,\
-                                      PDF TEXT,\
-                                      Radiografie TEXT,\
-                                      Nume_Pacient TEXT NOT NULL,\
-                                      FOREIGN KEY(Nume_Pacient) REFERENCES pacientiDB(ID))')
+                                      Interventie TEXT,\
+                                      Data TEXT,\
+                                      Ora TEXT,\
+                                      Prenume TEXT,\
+                                      Nume TEXT NOT NULL,\
+                                      FOREIGN KEY(Nume) REFERENCES pacientiDB(ID))')
+
+        #self.cursorProgramari.execute('CREATE TABLE IF NOT EXISTS programariDB\
+        #                              (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
+        #                              Tratament TEXT,\
+        #                              PDF TEXT,\
+        #                              Radiografie TEXT,\
+        #                              Nume_Pacient TEXT NOT NULL,\
+        #                              FOREIGN KEY(Nume_Pacient) REFERENCES pacientiDB(ID))')
 
 
     def introducere_pacient_db(self, pacient):
-        self.cursor.execute('''INSERT INTO pacientiDB(Prenume, Nume, Varsta, Sex) VALUES(?, ?, ?, ?)''', (pacient.prenume, pacient.nume, pacient.varsta, pacient.sex))
+        self.cursor.execute('''INSERT INTO pacientiDB(Prenume, Nume, Anul, Luna, Ziua, Telefon, CNP, Sex) VALUES(?, ?, ?, ?, ?, ?, ?, ?)''', (pacient.prenume, pacient.nume, pacient.anul, pacient.luna, pacient.ziua, pacient.telefon, pacient.cnp, pacient.sex))
         self.conn.commit()
 
     def introducere_programare_db(self, programare): ## comm out programare.tratament
-        self.cursorProgramari.execute('''INSERT INTO programariDB(Tratament, PDF, Radiografie, Nume_Pacient) VALUES(?, ?, ?, ?)''', (programare.tratament, programare.pdf, programare.radiografie, programare.numePacient))
+        self.cursorProgramari.execute('''INSERT INTO programariDB(Interventie, Data, Ora, Prenume, Nume) VALUES(?, ?, ?, ?, ?)''', (programare.interventie, programare.data, programare.ora, programare.prenume, programare.nume))
         self.connProgramari.commit()
 
     def afisare_tabel_programari(self):
@@ -104,11 +117,48 @@ class BazaDate(ClasaPacienti.Pacient):
         self.cursorProgramari.close()
         self.connProgramari.close()
 
+    def afisare_pacienti_in_lista(self, widget):
+
+        conn = sqlite3.connect('pacienti.db')
+        #connProgramari = sqlite3.connect('programari.db')
+        
+        cursor = conn.cursor()
+        self.cursor = cursor
+        self.cursor.execute("SELECT Nume FROM pacientiDB")
+        rows = self.cursor.fetchall()
+
+        for row in rows:
+            print(row[0])
+            widget.addItem(row[0])
+
+    def afisare_pacienti_in_lista_dupa_nume(self, listWidget, numeCautat):
+
+        conn = sqlite3.connect('pacienti.db')
+        #connProgramari = sqlite3.connect('programari.db')
+        
+        cursor = conn.cursor()
+        self.cursor = cursor
+        self.cursor.execute("SELECT Nume FROM pacientiDB")
+        rows = self.cursor.fetchall()
+
+        listWidget.clear()
+
+        
+        for row in rows:
+            if row[0].startswith(numeCautat):
+                print(row[0])
+                listWidget.addItem(row[0])
+
+
+        
+
 
 
 def AdaugarePacientDB(self,Pacient):
     # cred ca merge sters
     Pacient = Pacient
+
+
     PacientDB = BazaDate()
     PacientDB.create_table()
 
@@ -132,3 +182,15 @@ def AdaugarePacientDB(self,Pacient):
     PacientDB.close_DB()
 
     # print(Pacient.getNume())
+
+def AdaugareProgramareDB(self,Programare):
+    ProgramareDB = BazaDate()
+    ProgramareDB.create_table()
+
+    ProgramareDB.introducere_programare_db(Programare)
+
+    ProgramareDB.close_DB()
+
+#def AfisarePacientiInLista(self, widget):
+#    BazaDate.afisare_pacienti_in_lista(self, widget)
+

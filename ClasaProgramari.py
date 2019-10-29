@@ -1,10 +1,10 @@
 class Programare:
-    def __init__ (self, tratament, pdf, radiografie, numePacient):
-        self.tratament = tratament
-        self.pdf = pdf
-        self.radiografie = radiografie
-        self.numePacient = numePacient
-
+    def __init__ (self, interventie, data, ora, prenume, nume):
+        self.interventie = interventie
+        self.data = data
+        self.ora = ora
+        self.prenume = prenume
+        self.nume = nume
     #def setNume(self, noulNume):
     #    self.nume = noulNume
 
