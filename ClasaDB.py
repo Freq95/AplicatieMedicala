@@ -103,3 +103,32 @@ class BazaDate(ClasaPacienti.Pacient):
 
         self.cursorProgramari.close()
         self.connProgramari.close()
+
+
+
+def AdaugarePacientDB(self,Pacient):
+    # cred ca merge sters
+    Pacient = Pacient
+    PacientDB = BazaDate()
+    PacientDB.create_table()
+
+    # verificare daca exista pacient cu acelasi nume in DB
+    existaPacient = PacientDB.CheckExistentaPacientInDB(Pacient.prenume, Pacient.nume)
+
+
+    #Introducere in baza de date
+    if existaPacient:
+        print('Pacientul nu a fost introdus.')
+    else:
+        PacientDB.introducere_pacient_db(Pacient)
+
+    #PacientDB.afisare_tabel()
+
+    # cautare pacient
+    #PacientDB.cautare_prenume_pacient_DB('Marinica')
+    #PacientDB.cautare_nume_pacient_DB('Novac')
+
+
+    PacientDB.close_DB()
+
+    # print(Pacient.getNume())

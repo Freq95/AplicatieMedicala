@@ -1,0 +1,1 @@
+Pentru generare xxx.ui din QtCreator in xxx.py -> mergi in VSCode si rulezi comanda: "pyuic5 -x d:\03_Projects\AplicatieMedicala\UI\PacientGUIQt.ui -o d:\03_Projects\AplicatieMedicala\UI\PacientGuiQt.py"
