@@ -8,11 +8,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget
+from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget, QMessageBox
 
 import sys
 import calendar
-import ClasaDB, ClasaPacienti
+import ClasaDB, ClasaPacienti, ClasaProgramari, ClasaDocuments
 
 
 class MainGui(object):
@@ -47,7 +47,7 @@ class MainGui(object):
         self.listWidget.setGeometry(QtCore.QRect(10, 120, 231, 351))
         self.listWidget.setObjectName("listWidget")
         self.pushButton = QtWidgets.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(850, 110, 75, 23))
+        self.pushButton.setGeometry(QtCore.QRect(830, 110, 100, 23))
         self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(Dialog)
         self.pushButton_2.setGeometry(QtCore.QRect(850, 150, 75, 23))
@@ -110,6 +110,10 @@ class MainGui(object):
 
 
 
+
+        ## ADD HERE ALL NAMES IN DB
+
+        
         self.listWidget.addItem('Marian Parcalab' + '\n12:00')
         self.listWidget.addItem('Sorin Gheba 13:00')
         self.listWidget.addItem('Cristian Porcaru 14:00')
@@ -152,7 +156,7 @@ class MainGui(object):
         self.Form.show()
         Dialog.hide()
 
-
+ 
 
 class PacientGui(object):
     def setupUi(self, Form):
@@ -173,6 +177,20 @@ class PacientGui(object):
         self.lineEdit_5 = QtWidgets.QLineEdit(Form)
         self.lineEdit_5.setGeometry(QtCore.QRect(20, 360, 113, 20))
         self.lineEdit_5.setObjectName("lineEdit_5")
+
+
+        self.lineEdit_6 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_6.setGeometry(QtCore.QRect(20, 390, 113, 20))
+        self.lineEdit_6.setObjectName("lineEdit_6")
+
+        self.lineEdit_7 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_7.setGeometry(QtCore.QRect(20, 420, 113, 20))
+        self.lineEdit_7.setObjectName("lineEdit_7")
+
+        self.lineEdit_8 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_8.setGeometry(QtCore.QRect(20, 450, 113, 20))
+        self.lineEdit_8.setObjectName("lineEdit_8")
+
         self.label = QtWidgets.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(80, 50, 101, 101))
         self.label.setText("")
@@ -196,10 +214,23 @@ class PacientGui(object):
         self.label_6.setObjectName("label_6")
 
 
+        self.label_7 = QtWidgets.QLabel(Form)
+        self.label_7.setGeometry(QtCore.QRect(140, 390, 47, 13))
+        self.label_7.setObjectName("label_7")
+
+        self.label_8 = QtWidgets.QLabel(Form)
+        self.label_8.setGeometry(QtCore.QRect(140, 420, 47, 13))
+        self.label_8.setObjectName("label_8")
+
+        self.label_9 = QtWidgets.QLabel(Form)
+        self.label_9.setGeometry(QtCore.QRect(140, 450, 47, 13))
+        self.label_9.setObjectName("label_9")
+
+
         
         # /BUTTON ACTIONS LINK
         self.AdaugarePacietnBtn = QtWidgets.QPushButton(Form)
-        self.AdaugarePacietnBtn.setGeometry(QtCore.QRect(160, 440, 75, 23))
+        self.AdaugarePacietnBtn.setGeometry(QtCore.QRect(150, 490, 100, 23))
         self.AdaugarePacietnBtn.setObjectName("AdaugarePacietnBtn")
 
         self.AdaugarePacietnBtn.clicked.connect(self.AdaugarePacietnBtnClicked)
@@ -213,16 +244,20 @@ class PacientGui(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.label_2.setText(_translate("Form", "Prenume"))
         self.label_3.setText(_translate("Form", "Nume"))
-        self.label_4.setText(_translate("Form", "Varsta"))
-        self.label_5.setText(_translate("Form", "Sex"))
-        self.label_6.setText(_translate("Form", "Nothing Yet"))
+        self.label_4.setText(_translate("Form", "Anul"))
+        self.label_5.setText(_translate("Form", "Luna"))
+        self.label_6.setText(_translate("Form", "Ziua"))
+        self.label_7.setText(_translate("Form", "Telefon"))
+        self.label_8.setText(_translate("Form", "CNP"))
+        self.label_9.setText(_translate("Form", "Sex"))
+
         self.AdaugarePacietnBtn.setText(_translate("Form", "Adauga Pacient"))
 
     
     # /BUTTON ACTIONS
     def AdaugarePacietnBtnClicked(self):
         Dialog.show()
-        Pacient = ClasaPacienti.Pacient(self.lineEdit.text(), self.lineEdit_2.text(), self.lineEdit_3.text(), self.lineEdit_4.text())
+        Pacient = ClasaPacienti.Pacient(self.lineEdit.text(), self.lineEdit_2.text(), self.lineEdit_3.text(), self.lineEdit_4.text(), self.lineEdit_5.text(), self.lineEdit_6.text(), self.lineEdit_7.text(), self.lineEdit_8.text())
         ClasaDB.AdaugarePacientDB(self,Pacient)
         #!!!! GET ALL GUI's OPENED AND CLOSE WHICH ONE YOU LIKE
 
@@ -233,59 +268,28 @@ class PacientGui(object):
 class ProgramatorGui(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(800, 538)
-        self.timeEdit = QtWidgets.QTimeEdit(Form)
-        self.timeEdit.setGeometry(QtCore.QRect(30, 410, 115, 31))
-        self.timeEdit.setSizeIncrement(QtCore.QSize(10, 10))
+        Form.resize(400, 700)
         font = QtGui.QFont()
         font.setPointSize(15)
-        self.timeEdit.setFont(font)
-        self.timeEdit.setObjectName("timeEdit")
+
         self.lineEdit = QtWidgets.QLineEdit(Form)
-        self.lineEdit.setGeometry(QtCore.QRect(30, 180, 113, 20))
+        self.lineEdit.setGeometry(QtCore.QRect(30, 230, 150, 20))
         self.lineEdit.setObjectName("lineEdit")
-        self.lineEdit_2 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_2.setGeometry(QtCore.QRect(30, 210, 113, 20))
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.lineEdit_3 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_3.setGeometry(QtCore.QRect(30, 240, 113, 20))
-        self.lineEdit_3.setObjectName("lineEdit_3")
-        self.radioButton = QtWidgets.QRadioButton(Form)
-        self.radioButton.setGeometry(QtCore.QRect(30, 290, 82, 17))
-        self.radioButton.setObjectName("radioButton")
-        self.radioButton_2 = QtWidgets.QRadioButton(Form)
-        self.radioButton_2.setGeometry(QtCore.QRect(30, 310, 82, 17))
-        self.radioButton_2.setObjectName("radioButton_2")
-        self.checkBox = QtWidgets.QCheckBox(Form)
-        self.checkBox.setGeometry(QtCore.QRect(30, 330, 70, 17))
-        self.checkBox.setObjectName("checkBox")
-        self.checkBox_2 = QtWidgets.QCheckBox(Form)
-        self.checkBox_2.setGeometry(QtCore.QRect(30, 350, 70, 17))
-        self.checkBox_2.setObjectName("checkBox_2")
+
         self.label = QtWidgets.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(160, 180, 47, 13))
+        self.label.setGeometry(QtCore.QRect(190, 230, 80, 20))
         self.label.setObjectName("label")
-        self.label_2 = QtWidgets.QLabel(Form)
-        self.label_2.setGeometry(QtCore.QRect(160, 210, 47, 13))
-        self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(Form)
-        self.label_3.setGeometry(QtCore.QRect(160, 240, 47, 13))
-        self.label_3.setObjectName("label_3")
-        self.label_4 = QtWidgets.QLabel(Form)
-        self.label_4.setGeometry(QtCore.QRect(160, 420, 47, 13))
-        self.label_4.setObjectName("label_4")
+
         self.label_5 = QtWidgets.QLabel(Form)
-        self.label_5.setGeometry(QtCore.QRect(70, 40, 111, 111))
+        self.label_5.setGeometry(QtCore.QRect(136, 50, 128, 128))
         self.label_5.setText("")
         self.label_5.setPixmap(QtGui.QPixmap("icons/Tooth.png"))
         self.label_5.setScaledContents(True)
         self.label_5.setObjectName("label_5")
 
         self.listWidget = QtWidgets.QListWidget(Form)
-        self.listWidget.setGeometry(QtCore.QRect(240, 110, 341, 381))
+        self.listWidget.setGeometry(QtCore.QRect(30, 260, 230, 350))
         self.listWidget.setObjectName("listWidget")
-
-
 
         # /LIST ITEMS -> make them show current day
         listFont = QtGui.QFont()
@@ -293,46 +297,144 @@ class ProgramatorGui(object):
         listFont.setBold(True)
         listFont.setWeight(35)
 
-        self.listWidget.addItem('Marian Parcalab' + '\n12:00')
-        self.listWidget.addItem('Sorin Gheba 13:00')
-        self.listWidget.addItem('Cristian Porcaru 14:00')
-        self.listWidget.setFont(listFont)
+        ClasaDB.BazaDate.afisare_pacienti_in_lista(self, self.listWidget)
 
-        item = QListWidgetItem(self.listWidget)
-        item_widget = CustomQWidget()
-        item.setSizeHint(item_widget.sizeHint())
-        self.listWidget.addItem(item)
-        self.listWidget.setItemWidget(item, item_widget)
+        ## Campul cautare pacient s-a modificat BIND
+        inputNume = self.lineEdit
+
+        self.lineEdit.textChanged.connect(lambda: self.sync_lineEdit(self.listWidget, inputNume))
+        ## Campul cautare pacient s-a modificat BIND
+
+        #self.listWidget.addItem('Cristian Porcaru 14:00')
+        #self.listWidget.setFont(listFont)
+
+        #item = QListWidgetItem(self.listWidget)
+        #item_widget = CustomQWidget()
+        #item.setSizeHint(item_widget.sizeHint())
+        #self.listWidget.addItem(item)
+        #self.listWidget.setItemWidget(item, item_widget)
         # LIST ITEMS/
 
         # /BUTTON ACTIONS LINK
         self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(160, 440, 75, 23))
+        self.pushButton.setGeometry(QtCore.QRect(270, 600, 120, 80))
         self.pushButton.setObjectName("pushButton")
 
-        self.pushButton.clicked.connect(self.AdaugarePacietnBtnClicked)
+        # return the selected item
+        #selection = self.listWidget.itemSelectionChanged.connect(self.SelectionChanged)
+
+        # should input the selected item
+        self.pushButton.clicked.connect(lambda: self.AdaugareProgramareBtnClicked(self.listWidget))
+        
         # BUTTON ACTIONS LINK/
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
+    '''def SelectionChanged(self):
+        selection = ''
+        for item in self.listWidget.selectedItems():
+            selection = item.text()
+        print(selection)
+        return selection
+    '''
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.timeEdit.setDisplayFormat(_translate("Form", "hh:mm AP"))
+        #self.timeEdit.setDisplayFormat(_translate("Form", "hh:mm AP"))
+
+        self.label.setText(_translate("Form", "Cauta Pacient"))
+        self.pushButton.setText(_translate("Form", "Adaugare Programare"))
+    
+    def AdaugareProgramareBtnClicked(self, selection):
+        ###    
+        print("Gui Programare")
+        #Dialog.show()
+        selection = ''
+        for item in self.listWidget.selectedItems():
+            selection = item.text()
+
+        print(selection)
+        print('000')
+        numePacient = selection
+
+        print('Docs GUI')
+        self.Form = QtWidgets.QWidget()
+        self.ui = DocumentsGui()
+
+        # trimite aici ca parametru numele pacientului in cauza
+        self.ui.setupUi(self.Form, numePacient)
+        self.Form.show()
+        Dialog.hide()
+        #Programare = ClasaProgramari.Programare(self.lineEdit.text(), self.lineEdit_2.text(), self.lineEdit_3.text(), self.lineEdit_4.text(), self.lineEdit_5.text())
+        #ClasaDB.AdaugareProgramareDB(self,Programare)
+
+    # functia care este apelata pentru a face update listei de pacienti
+    def sync_lineEdit(self, listWidget, inputNume):
+        print("")
+        ## Update lista pacienti
+        numeCautat = inputNume.text()
+        ClasaDB.BazaDate.afisare_pacienti_in_lista_dupa_nume(self, listWidget, numeCautat)
+
+
+
+class DocumentsGui(object):
+    def setupUi(self, Form, numeCompletPacient):
+        Form.setObjectName("Form")
+        Form.resize(260, 509)
+        self.groupBox = QtWidgets.QGroupBox(Form)
+        self.groupBox.setGeometry(QtCore.QRect(20, 80, 201, 191))
+        self.groupBox.setObjectName("groupBox")
+        self.label = QtWidgets.QLabel(self.groupBox)
+        self.label.setGeometry(QtCore.QRect(20, 40, 47, 13))
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(self.groupBox)
+        self.label_2.setGeometry(QtCore.QRect(20, 80, 47, 13))
+        self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(self.groupBox)
+        self.label_3.setGeometry(QtCore.QRect(20, 120, 47, 13))
+        self.label_3.setObjectName("label_3")
+        self.pushButton = QtWidgets.QPushButton(Form)
+        self.pushButton.setGeometry(QtCore.QRect(150, 400, 75, 23))
+        self.pushButton.setObjectName("pushButton")
+        self.pushButton_2 = QtWidgets.QPushButton(Form)
+        self.pushButton_2.setGeometry(QtCore.QRect(150, 440, 75, 23))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.radioButton = QtWidgets.QRadioButton(Form)
+        self.radioButton.setGeometry(QtCore.QRect(20, 290, 82, 17))
+        self.radioButton.setObjectName("radioButton")
+        self.radioButton_2 = QtWidgets.QRadioButton(Form)
+        self.radioButton_2.setGeometry(QtCore.QRect(20, 320, 82, 17))
+        self.radioButton_2.setObjectName("radioButton_2")
+        self.checkBox = QtWidgets.QCheckBox(Form)
+        self.checkBox.setGeometry(QtCore.QRect(120, 290, 70, 17))
+        self.checkBox.setObjectName("checkBox")
+        self.checkBox_2 = QtWidgets.QCheckBox(Form)
+        self.checkBox_2.setGeometry(QtCore.QRect(120, 320, 70, 17))
+        self.checkBox_2.setObjectName("checkBox_2")
+
+
+
+        self.retranslateUi(Form, numeCompletPacient)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form, numeCompletPacient):
+        _translate = QtCore.QCoreApplication.translate
+
+        numePacient = numeCompletPacient.split(' ')[0]
+        prenumePacient = numeCompletPacient.split(' ')[1]
+
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.groupBox.setTitle(_translate("Form", "Date Pacient"))
+        self.label.setText(_translate("Form", numePacient))
+        self.label_2.setText(_translate("Form", prenumePacient))
+        self.label_3.setText(_translate("Form", "TextLabel"))
+        self.pushButton.setText(_translate("Form", "GUI"))
+        self.pushButton_2.setText(_translate("Form", "PushButton"))
         self.radioButton.setText(_translate("Form", "RadioButton"))
         self.radioButton_2.setText(_translate("Form", "RadioButton"))
         self.checkBox.setText(_translate("Form", "CheckBox"))
         self.checkBox_2.setText(_translate("Form", "CheckBox"))
-        self.label.setText(_translate("Form", "TextLabel"))
-        self.label_2.setText(_translate("Form", "TextLabel"))
-        self.label_3.setText(_translate("Form", "TextLabel"))
-        self.label_4.setText(_translate("Form", "TextLabel"))
-        self.pushButton.setText(_translate("Form", "Adaugare Programare"))
-    
-    def AdaugarePacietnBtnClicked(self):
-        ###    
-        print("")
 
 
 
@@ -346,6 +448,10 @@ class CustomQWidget(QWidget):
         layout.addWidget(label)
         layout.addWidget(button)
         self.setLayout(layout)
+        button.clicked.connect(self.CustomWidgetBtnCallback)
+
+    def CustomWidgetBtnCallback(self):
+        print('12121')
 
 
 
