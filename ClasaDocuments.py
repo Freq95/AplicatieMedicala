@@ -1,6 +1,5 @@
 class Documents:
-    def __init__ (self, prenume, nume, pdf, image):
+    def __init__ (self, prenume, nume, document):
         self.prenume = prenume
         self.nume = nume
-        self.pdf = pdf
-        self.image = image
+        self.document = document

@@ -4,6 +4,8 @@ import sqlite3
 import ClasaPacienti
 import ClasaDocuments
 
+import datetime
+
 # conn = sqlite3.connect('pacienti.db')
 # c = conn.cursor()
 
@@ -60,8 +62,7 @@ class BazaDate(ClasaPacienti.Pacient):
                                       (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
                                       Prenume TEXT,\
                                       Nume TEXT,\
-                                      PDF TEXT,\
-                                      IMG TEXT,\
+                                      Document TEXT,\
                                       FOREIGN KEY(Nume) REFERENCES pacientiDB(ID))')
 
 
@@ -70,12 +71,13 @@ class BazaDate(ClasaPacienti.Pacient):
         self.conn.commit()
 
     def introducere_programare_db(self, programare): ## comm out programare.tratament
-        self.cursorProgramari.execute('''INSERT INTO programariDB(Interventie, Data, Ora, Prenume, Nume) VALUES(?, ?, ?, ?, ?)''', (programare.interventie, programare.data, programare.ora, programare.prenume, programare.nume))
+        self.cursorProgramari.execute('''INSERT INTO programariDB(Interventie, Data, Ora, Prenume, Nume) VALUES(?, ?, ?, ?, ?)''', (programare.interventie, str(programare.data), programare.ora.toString(), programare.prenume, programare.nume))
         self.connProgramari.commit()
 
     def introducere_docs_db(self, docs):
-        self.cursorDocs.execute('''INSERT INTO docsDB(Prenume, Nume, PDF, IMG) VALUES(?, ?, ?, ?)''', (docs.prenume, docs.nume, docs.pdf, docs.image))
+        self.cursorDocs.execute('''INSERT INTO docsDB(Prenume, Nume, Document) VALUES(?, ?, ?)''', (docs.prenume, docs.nume, docs.document))
         self.connDocs.commit()
+
 
     def afisare_tabel_programari(self):
         self.cursorProgramari.execute("SELECT * FROM programariDB")
@@ -128,6 +130,18 @@ class BazaDate(ClasaPacienti.Pacient):
             print('Pacient Nou')
             return False
 
+    def CheckExistentaDocumentInDB(self, document):
+        self.cursorDocs.execute("SELECT * FROM docsDB WHERE Document=?", (document,))
+        flagDocumente = self.cursorDocs.fetchall()
+
+        if flagDocumente.__len__() > 0:
+            print('In baza de date acest document exista.')
+            return True
+        else:
+            print('Document nou')
+            return False
+
+
     def cautare_nume_pacient_DB(self, numeCautat):
         self.cursor.execute("SELECT * FROM pacientiDB WHERE prenume=?", (numeCautat,))
         rows = self.cursor.fetchall()
@@ -175,21 +189,56 @@ class BazaDate(ClasaPacienti.Pacient):
                 print(row[0], prenume[0][0])
                 listWidget.addItem(row[0] + ' ' + prenume[0][0]) 
 
-        
+    def CheckAndAddToListCurrentAppointment(self, listWidget, currentSelection):
+        conn = sqlite3.connect('programari.db')
+            #connProgramari = sqlite3.connect('programari.db')
+            
+        cursor = conn.cursor()
+        self.cursor = cursor
+        self.cursor.execute("SELECT * FROM programariDB")
+        rows = self.cursor.fetchall()
+
+        listWidget.clear()
+
+        for row in rows:
+            if row[2] == currentSelection.isoformat():
+                #self.cursor.execute("SELECT Prenume FROM pacientiDB WHERE Nume=?", (row[0],))
+                #prenume = self.cursor.fetchall()
+                #print(row[0], prenume[0][0])
+                #listWidget.addItem(row[0] + ' ' + prenume[0][0]) 
+                print('Adauga')
+                #listWidget.addItem(row[4] + row [5] + ' : ' + '\n' + row[3])
+                listWidget.addItem(row[4] + row [5] + ' - ' + row[3])
+            
 
 
 
-def AdaugarePacientDB(self,Pacient):
-    # cred ca merge sters
-    Pacient = Pacient
 
 
+
+def AdaugaDocumentInDB(Document):
+    DocumentDB = BazaDate()
+    DocumentDB.create_table()
+
+    # verifica daca exista acelasi document in baza de date
+    existaDcument = DocumentDB.CheckExistentaDocumentInDB(Document.document)
+
+    #Introducere in baza de date
+    if existaDcument:
+        print('Documentul nu a fost introdus.')
+    else:
+        DocumentDB.introducere_docs_db(Document)
+
+    DocumentDB.close_DB()
+
+
+
+def AdaugarePacientDB(self, Pacient):
     PacientDB = BazaDate()
     PacientDB.create_table()
 
     # verificare daca exista pacient cu acelasi nume in DB
     existaPacient = PacientDB.CheckExistentaPacientInDB(Pacient.prenume, Pacient.nume)
-
 
     #Introducere in baza de date
     if existaPacient:
@@ -197,26 +246,30 @@ def AdaugarePacientDB(self,Pacient):
     else:
         PacientDB.introducere_pacient_db(Pacient)
 
-    #PacientDB.afisare_tabel()
-
-    # cautare pacient
-    #PacientDB.cautare_prenume_pacient_DB('Marinica')
-    #PacientDB.cautare_nume_pacient_DB('Novac')
-
-
     PacientDB.close_DB()
 
-    # print(Pacient.getNume())
 
-def AdaugareProgramareDB(self,Programare):
+
+def AdaugareProgramareDB(Programare):
     ProgramareDB = BazaDate()
     ProgramareDB.create_table()
-
     ProgramareDB.introducere_programare_db(Programare)
-    
-
     ProgramareDB.close_DB()
 
-#def AfisarePacientiInLista(self, widget):
-#    BazaDate.afisare_pacienti_in_lista(self, widget)
+def CheckAndAddToListCurrentAppointment(self, listWidget, currentSelection):
+    conn = sqlite3.connect('programari.db')
+        #connProgramari = sqlite3.connect('programari.db')
+        
+    cursor = conn.cursor()
+    self.cursor = cursor
+    self.cursor.execute("SELECT Data FROM programariDB")
+    rows = self.cursor.fetchall()
 
+    listWidget.clear()
+
+    for row in rows:
+        if row[0].startswith(numeCautat):
+            self.cursor.execute("SELECT Prenume FROM pacientiDB WHERE Nume=?", (row[0],))
+            prenume = self.cursor.fetchall()
+            print(row[0], prenume[0][0])
+            listWidget.addItem(row[0] + ' ' + prenume[0][0]) 

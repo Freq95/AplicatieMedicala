@@ -5,10 +5,5 @@ class Programare:
         self.ora = ora
         self.prenume = prenume
         self.nume = nume
-    #def setNume(self, noulNume):
-    #    self.nume = noulNume
-
-    #def getNume(self):
-    #    return self.nume
 
 
