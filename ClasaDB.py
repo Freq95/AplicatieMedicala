@@ -1,10 +1,15 @@
 ## TO-DO:     1. Gandeste alta structura de tabele(ex: 2 tabele relationate ... fiecare pacient are mai multe inregistrari)
 ##            2. Adauga campuri unice
 import sqlite3
+import datetime
+import os
+
 import ClasaPacienti
 import ClasaDocuments
 
-import datetime
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QListWidgetItem
+from PyQt5.QtGui import QColor
 
 # conn = sqlite3.connect('pacienti.db')
 # c = conn.cursor()
@@ -31,15 +36,15 @@ class BazaDate(ClasaPacienti.Pacient):
 
     def create_table(self):
         self.cursor.execute('CREATE TABLE IF NOT EXISTS pacientiDB\
-        (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
-        Prenume TEXT NOT NULL,\
-        Nume TEXT NOT NULL,\
-        Anul TEXT,\
-        Luna TEXT,\
-        Ziua TEXT,\
-        Telefon TEXT,\
-        CNP TEXT,\
-        Sex TEXT)')
+                            (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
+                            Prenume TEXT NOT NULL,\
+                            Nume TEXT NOT NULL,\
+                            Anul TEXT,\
+                            Luna TEXT,\
+                            Ziua TEXT,\
+                            Telefon TEXT,\
+                            CNP TEXT,\
+                            Sex TEXT)')
 
         self.cursorProgramari.execute('CREATE TABLE IF NOT EXISTS programariDB\
                                       (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
@@ -48,22 +53,14 @@ class BazaDate(ClasaPacienti.Pacient):
                                       Ora TEXT,\
                                       Prenume TEXT,\
                                       Nume TEXT NOT NULL,\
-                                      FOREIGN KEY(Nume) REFERENCES pacientiDB(ID))')
-
-        #self.cursorProgramari.execute('CREATE TABLE IF NOT EXISTS programariDB\
-        #                              (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
-        #                              Tratament TEXT,\
-        #                              PDF TEXT,\
-        #                              Radiografie TEXT,\
-        #                              Nume_Pacient TEXT NOT NULL,\
-        #                              FOREIGN KEY(Nume_Pacient) REFERENCES pacientiDB(ID))')
+                                      FOREIGN KEY(Nume) REFERENCES pacientiDB(ID) ON DELETE CASCADE)')
 
         self.cursorDocs.execute('CREATE TABLE IF NOT EXISTS docsDB\
                                       (ID INTEGER PRIMARY KEY AUTOINCREMENT,\
                                       Prenume TEXT,\
                                       Nume TEXT,\
                                       Document TEXT,\
-                                      FOREIGN KEY(Nume) REFERENCES pacientiDB(ID))')
+                                      FOREIGN KEY(Nume) REFERENCES pacientiDB(ID) ON DELETE CASCADE)')
 
 
     def introducere_pacient_db(self, pacient):
@@ -71,7 +68,7 @@ class BazaDate(ClasaPacienti.Pacient):
         self.conn.commit()
 
     def introducere_programare_db(self, programare): ## comm out programare.tratament
-        self.cursorProgramari.execute('''INSERT INTO programariDB(Interventie, Data, Ora, Prenume, Nume) VALUES(?, ?, ?, ?, ?)''', (programare.interventie, str(programare.data), programare.ora.toString(), programare.prenume, programare.nume))
+        self.cursorProgramari.execute('''INSERT INTO programariDB(Interventie, Data, Ora, Prenume, Nume) VALUES(?, ?, ?, ?, ?)''', (programare.interventie, str(programare.data), programare.ora.toString('hh:mm'), programare.prenume, programare.nume))
         self.connProgramari.commit()
 
     def introducere_docs_db(self, docs):
@@ -168,7 +165,7 @@ class BazaDate(ClasaPacienti.Pacient):
 
         for row in rows:
             print(row[0] + row[1])
-            widget.addItem(row[0] + ' ' + row[1])
+            widget.addItem(row[1] + ' ' + row[0])
 
     def afisare_pacienti_in_lista_dupa_nume(self, listWidget, numeCautat):
 
@@ -177,17 +174,29 @@ class BazaDate(ClasaPacienti.Pacient):
         
         cursor = conn.cursor()
         self.cursor = cursor
-        self.cursor.execute("SELECT Nume FROM pacientiDB")
+        self.cursor.execute("SELECT Nume, Prenume FROM pacientiDB")
         rows = self.cursor.fetchall()
 
         listWidget.clear()
+        numeCautat = numeCautat.lower()
 
+        for row in rows:
+            nume = row[0].lower()
+            prenume = row[1].lower()
+            if nume.startswith(numeCautat) or prenume.startswith(numeCautat):
+                
+                listWidget.addItem(row[1] + ' ' + row[0]) 
+        '''
         for row in rows:
             if row[0].startswith(numeCautat):
                 self.cursor.execute("SELECT Prenume FROM pacientiDB WHERE Nume=?", (row[0],))
                 prenume = self.cursor.fetchall()
-                print(row[0], prenume[0][0])
-                listWidget.addItem(row[0] + ' ' + prenume[0][0]) 
+                
+                for pre in prenume:
+                    print(row[0], pre[0])
+                    listWidget.addItem(pre[0] + ' ' + row[0]) 
+        '''
+            
 
     def CheckAndAddToListCurrentAppointment(self, listWidget, currentSelection):
         conn = sqlite3.connect('programari.db')
@@ -208,14 +217,103 @@ class BazaDate(ClasaPacienti.Pacient):
                 #listWidget.addItem(row[0] + ' ' + prenume[0][0]) 
                 print('Adauga')
                 #listWidget.addItem(row[4] + row [5] + ' : ' + '\n' + row[3])
-                listWidget.addItem(row[4] + row [5] + ' - ' + row[3])
+                numeP = str(row[4] + ' '  + row [5] + ' \n' + row[3] + '\n')
+                listWidget.addItem(numeP)
+                print(listWidget.count())
+
+                
+
+        return listWidget
+
+    def UpdateListWithDocuments(self, listWidget, numePacient):
+        conn = sqlite3.connect('docs.db')
+            #connProgramari = sqlite3.connect('programari.db')
             
+        cursor = conn.cursor()
+        self.cursor = cursor
+
+        prenume =  numePacient.split(' ')[0]
+        nume = numePacient.split(' ')[1]
+        
+        self.cursor.execute("SELECT * FROM docsDB WHERE prenume=? AND nume=?",  (prenume, nume))
+        rows = self.cursor.fetchall()
+
+        listWidget.clear()
+
+        for row in rows:
+            path, fileName = os.path.split(row[3])
+            #self.cursor.execute("SELECT Prenume FROM pacientiDB WHERE Nume=?", (row[0],))
+            #prenume = self.cursor.fetchall()
+            #print(row[0], prenume[0][0])
+            #listWidget.addItem(row[0] + ' ' + prenume[0][0])
+            #listWidget.addItem(row[4] + row [5] + ' : ' + '\n' + row[3])
+            #numeP = str(row[4] + ' '  + row [5] + ' \n' + row[3] + '\n')
+            listWidget.addItem(fileName)
+            print(listWidget.count())
+
+                
+
+        return listWidget
+
+    
+def IndexProgramare(self, infoPacient):
+    #infoPacient - este rezultatul apelarii functiei InfoPacient
+    for row in infoPacient:
+            return (row[0])
 
 
+def InfoPacient(self, prenumePacient, numePacient):
+    conn = sqlite3.connect('pacienti.db')
+            #connProgramari = sqlite3.connect('programari.db')
+            
+    cursor = conn.cursor()
+    self.cursor = cursor
+    
+    self.cursor.execute("SELECT * FROM pacientiDB WHERE prenume=? AND nume=?",  (prenumePacient, numePacient))
+    
+    rows = self.cursor.fetchall()
+    return rows
+
+def InfoProgramare(self, prenumePacient, numePacient, dataProgramare, oraProgramare):
+    conn = sqlite3.connect('programari.db')
+            #connProgramari = sqlite3.connect('programari.db')
+            
+    cursor = conn.cursor()
+    self.cursor = cursor
+    data = dataProgramare.toString("yyyy-MM-dd")
+    self.cursor.execute("SELECT * FROM programariDB WHERE prenume=? AND nume=? AND data=? AND ora=?",  (prenumePacient, numePacient, data, oraProgramare))
+    
+    rows = self.cursor.fetchall()
+    return rows
+
+def afisareInfoPacient(self, numePacient):
+        conn = sqlite3.connect('pacienti.db')
+            #connProgramari = sqlite3.connect('programari.db')
+            
+        cursor = conn.cursor()
+        self.cursor = cursor
+        
+        prenume =  numePacient.split(' ')[0]
+        nume = numePacient.split(' ')[1]
+        
 
 
+        self.cursor.execute("SELECT * FROM pacientiDB WHERE prenume=? AND nume=?",  (prenume, nume))
+        
+        rows = self.cursor.fetchall()
 
+        for row in rows:
+            _translate = QtCore.QCoreApplication.translate
+            self.label_2.setText(_translate("Form", row[1]))
+            self.label_3.setText(_translate("Form", row[2]))
+            dataNasterii = row[5]  +  '/'  +  row[4] +  '/'  +  row[3]
+            self.label_4.setText(_translate("Form", dataNasterii))
+            self.label_5.setText(_translate("Form", row[6]))
+            self.label_6.setText(_translate("Form", row[7]))
+            
+            self.label_7.setText(_translate("Form", row[8]))
 
+        
 def AdaugaDocumentInDB(Document):
     DocumentDB = BazaDate()
     DocumentDB.create_table()
@@ -231,8 +329,6 @@ def AdaugaDocumentInDB(Document):
 
     DocumentDB.close_DB()
 
-
-
 def AdaugarePacientDB(self, Pacient):
     PacientDB = BazaDate()
     PacientDB.create_table()
@@ -247,8 +343,6 @@ def AdaugarePacientDB(self, Pacient):
         PacientDB.introducere_pacient_db(Pacient)
 
     PacientDB.close_DB()
-
-
 
 def AdaugareProgramareDB(Programare):
     ProgramareDB = BazaDate()
@@ -273,3 +367,108 @@ def CheckAndAddToListCurrentAppointment(self, listWidget, currentSelection):
             prenume = self.cursor.fetchall()
             print(row[0], prenume[0][0])
             listWidget.addItem(row[0] + ' ' + prenume[0][0]) 
+
+def UpdatePacientiProgramari(self, Pacient, Programare, indexPacient, indexProgramare):
+    # Update lista Pacienti 
+    sql = ''' UPDATE pacientiDB
+              SET Prenume = ? ,
+                  Nume = ? ,
+                  Anul = ?,
+                  Luna = ?,
+                  Ziua = ?,
+                  Telefon = ?,
+                  CNP = ?,
+                  Sex = ?
+              WHERE id = ?'''
+    
+    conn = sqlite3.connect('pacienti.db')    
+    cursor = conn.cursor()
+    self.cursor = cursor
+    Pacient = (
+                Pacient.prenume, 
+                Pacient.nume, 
+                Pacient.anul, 
+                Pacient.luna, 
+                Pacient.ziua, 
+                Pacient.telefon, 
+                Pacient.cnp, 
+                Pacient.sex,
+                indexPacient
+                )
+
+    self.cursor.execute(sql, Pacient)
+    conn.commit()
+
+    # Update lista Programari
+    sql2 = ''' UPDATE programariDB
+              SET Interventie = ? ,
+                  Data = ? ,
+                  Ora = ?,
+                  Prenume = ?,
+                  Nume = ?
+              WHERE id = ?'''
+    
+    connProgramari = sqlite3.connect('programari.db')    
+    cursor2 = connProgramari.cursor()
+    self.cursor2 = cursor2
+    Programare = (
+                Programare.interventie, 
+                Programare.data.toString("yyyy-MM-dd"), 
+                Programare.ora.toString(), 
+                Programare.prenume, 
+                Programare.nume, 
+                indexProgramare
+                )
+
+    self.cursor2.execute(sql2, Programare)
+    connProgramari.commit()
+
+def StergePacient(self, indexPacient):
+    sql = 'DELETE FROM pacientiDB WHERE id=?'
+    conn = sqlite3.connect('pacienti.db')    
+    cursor = conn.cursor()
+    self.cursor = cursor
+    self.cursor.execute(sql, (indexPacient,))
+    conn.commit()
+
+def StergeDocument(self, indexDocument):
+    sql = 'DELETE FROM docsDB WHERE id=?'
+    conn = sqlite3.connect('docs.db')    
+    cursor = conn.cursor()
+    self.cursor = cursor
+    self.cursor.execute(sql, (indexDocument,))
+    conn.commit()
+
+def StergeProgramare(self, indexProgramare):
+    sql = 'DELETE FROM programariDB WHERE id=?'
+    conn = sqlite3.connect('programari.db')    
+    cursor = conn.cursor()
+    self.cursor = cursor
+    self.cursor.execute(sql, (indexProgramare,))
+    conn.commit()
+
+def VerificaExistentaProgramare(self, data, ora):
+    conn = sqlite3.connect('programari.db')            
+    cursor = conn.cursor()
+    self.cursor = cursor
+    ora = ora.toString('hh:mm')
+    data = data.toString("yyyy-MM-dd")
+
+    self.cursor.execute("SELECT * FROM programariDB WHERE data=? AND ora=?",  (data, ora))
+    rows = self.cursor.fetchall()
+
+    return rows.__len__()
+
+def GetInterventieProgramare(self, nume, prenume, data, ora):
+    conn = sqlite3.connect('programari.db')            
+    cursor = conn.cursor()
+    self.cursor = cursor
+    data = data.toString("yyyy-MM-dd")
+
+    self.cursor.execute("SELECT * FROM programariDB WHERE prenume=? AND nume=? AND data=? AND ora=?",  (prenume, nume, data, ora))
+    rows = self.cursor.fetchall()
+
+    for row in rows:
+        return row[1]
+
+    
