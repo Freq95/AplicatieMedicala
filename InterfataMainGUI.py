@@ -216,7 +216,7 @@ class Main(object):
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
-        font.setPointSize(80)
+        font.setPointSize(60)
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.gridLayout_2.addWidget(self.label, 0, 0, 4, 1)
@@ -229,6 +229,7 @@ class Main(object):
         self.gridLayout_2.addWidget(self.label_2, 1, 1, 1, 1)
         self.gridLayout_3.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
+        
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -413,6 +414,12 @@ def HideMainGuiCallback():
 
 
 app = QtWidgets.QApplication(sys.argv)
+app.setWindowIcon(QtGui.QIcon('icons/Tooth256.png'))
+
+# print existing gui styles and set it to FUSION
+print(QtWidgets.QStyleFactory.keys())
+app.setStyle('Fusion')
+
 Dialog = QtWidgets.QWidget()
 
 # creaza bazele de date daca acestea nu exista

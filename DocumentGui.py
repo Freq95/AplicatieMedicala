@@ -156,7 +156,7 @@ class Document(object):
         button.setAutoDefault(False)
         button.setFlat(True)
       
-        Form.setWindowTitle('Documente')
+        Form.setWindowTitle('Aplicatie Medicala')
         button.setGeometry(QtCore.QRect(0, 210, 401, 411))
 
         self.retranslateUi(Form)

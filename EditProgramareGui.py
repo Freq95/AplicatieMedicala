@@ -233,7 +233,7 @@ class EditProgramare(object):
 
     def retranslateUi(self, Form, infoPacient, infoProgramare, fereastraPrincipala):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Aplicatie Medicala"))
         
         self.pushButton.setText(_translate("Form", "Salveaza"))
         self.pushButton_2.setText(_translate("Form", "Back"))
