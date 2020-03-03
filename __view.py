@@ -1,19 +1,21 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'D:\03_Projects\AplicatieMedicala\view.ui'
+#
+# Created by: PyQt5 UI code generator 5.13.1
+#
+# WARNING! All changes made in this file will be lost!
+
+
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget, QMessageBox, QLineEdit, QApplication, QMessageBox, QSizePolicy
-from InterfataMainGUI import ShowMainGuiCallback
 
-import datetime
-import ClasaProgramari, ClasaDB
 
-class Programare(object):
-    def setupUi(self, Form, numeCompletPacient, fereastraPrincipala):
-        
-        now = datetime.datetime.now()
-        
+class Ui_Form(object):
+    def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(250, 396)
-        Form.setMinimumSize(QtCore.QSize(250, 0))
-        Form.setMaximumSize(QtCore.QSize(250, 400))
+        Form.resize(510, 429)
+        Form.setMinimumSize(QtCore.QSize(485, 400))
+        Form.setMaximumSize(QtCore.QSize(510, 510))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -124,122 +126,135 @@ class Programare(object):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
         Form.setPalette(palette)
-
-        self.gridLayout_4 = QtWidgets.QGridLayout(Form)
-        self.gridLayout_4.setObjectName("gridLayout_4")
+        self.gridLayout_2 = QtWidgets.QGridLayout(Form)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.horizontalLayout.addItem(spacerItem)
+        self.listWidget = QtWidgets.QListWidget(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.listWidget.sizePolicy().hasHeightForWidth())
+        self.listWidget.setSizePolicy(sizePolicy)
+        self.listWidget.setMinimumSize(QtCore.QSize(200, 0))
+        self.listWidget.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.listWidget.setObjectName("listWidget")
+        self.horizontalLayout.addWidget(self.listWidget)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.horizontalLayout.addItem(spacerItem1)
+        self.gridLayout_2.addLayout(self.horizontalLayout, 0, 1, 1, 1)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
         self.label = QtWidgets.QLabel(Form)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setMaximumSize(QtCore.QSize(150, 150))
+        self.label.setText("")
+        self.label.setPixmap(QtGui.QPixmap("icons/Programare2.png"))
+        self.label.setScaledContents(True)
         self.label.setObjectName("label")
-        self.gridLayout.addWidget(self.label, 2, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.label, 2, 1, 1, 1)
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.label_8 = QtWidgets.QLabel(Form)
+        self.label_8.setObjectName("label_8")
+        self.horizontalLayout_7.addWidget(self.label_8)
+        self.label_11 = QtWidgets.QLabel(Form)
+        self.label_11.setObjectName("label_11")
+        self.horizontalLayout_7.addWidget(self.label_11)
+        self.gridLayout.addLayout(self.horizontalLayout_7, 8, 1, 1, 1)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.label_2 = QtWidgets.QLabel(Form)
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_2.setObjectName("label_2")
-        self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
+        self.horizontalLayout_2.addWidget(self.label_2)
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setObjectName("label_3")
-        self.gridLayout.addWidget(self.label_3, 4, 0, 1, 1)
-        self.plainTextEdit = QtWidgets.QPlainTextEdit(Form)
-        self.plainTextEdit.setMinimumSize(QtCore.QSize(230, 0))
-        self.plainTextEdit.setMaximumSize(QtCore.QSize(230, 140))
-        self.plainTextEdit.setObjectName("plainTextEdit")
-        self.gridLayout.addWidget(self.plainTextEdit, 5, 0, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem1, 3, 0, 1, 1)
-        self.gridLayout_4.addLayout(self.gridLayout, 0, 0, 1, 1)
-        self.gridLayout_2 = QtWidgets.QGridLayout()
-        self.gridLayout_2.setObjectName("gridLayout_2")
-        self.dateEdit = QtWidgets.QDateEdit(Form)
-        self.dateEdit.setMinimumSize(QtCore.QSize(120, 0))
-        self.dateEdit.setCalendarPopup(True)
-        self.dateEdit.setObjectName("dateEdit")
-        self.dateEdit.setDateTime(QtCore.QDateTime(QtCore.QDate(now.year, now.month, now.day), QtCore.QTime(0, 0, 0)))
-        self.gridLayout_2.addWidget(self.dateEdit, 1, 1, 1, 1)
-        self.timeEdit = QtWidgets.QTimeEdit(Form)
-        self.timeEdit.setMinimumSize(QtCore.QSize(120, 0))
-        self.timeEdit.setCalendarPopup(True)
-        self.timeEdit.setObjectName("timeEdit")
-        self.gridLayout_2.addWidget(self.timeEdit, 0, 1, 1, 1)
-        
+        self.horizontalLayout_2.addWidget(self.label_3)
+        self.gridLayout.addLayout(self.horizontalLayout_2, 3, 1, 1, 1)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.label_4 = QtWidgets.QLabel(Form)
         self.label_4.setObjectName("label_4")
-        self.gridLayout_2.addWidget(self.label_4, 0, 0, 1, 1)
-
+        self.horizontalLayout_3.addWidget(self.label_4)
+        self.label_15 = QtWidgets.QLabel(Form)
+        self.label_15.setObjectName("label_15")
+        self.horizontalLayout_3.addWidget(self.label_15)
+        self.gridLayout.addLayout(self.horizontalLayout_3, 4, 1, 1, 1)
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.label_7 = QtWidgets.QLabel(Form)
+        self.label_7.setObjectName("label_7")
+        self.horizontalLayout_6.addWidget(self.label_7)
+        self.label_12 = QtWidgets.QLabel(Form)
+        self.label_12.setObjectName("label_12")
+        self.horizontalLayout_6.addWidget(self.label_12)
+        self.gridLayout.addLayout(self.horizontalLayout_6, 7, 1, 1, 1)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.label_5 = QtWidgets.QLabel(Form)
         self.label_5.setObjectName("label_5")
-        self.gridLayout_2.addWidget(self.label_5, 1, 0, 1, 1)
-
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_2.addItem(spacerItem2, 0, 1, 1, 1)
-        self.gridLayout_4.addLayout(self.gridLayout_2, 1, 0, 1, 1)
-        self.gridLayout_3 = QtWidgets.QGridLayout()
-        self.gridLayout_3.setObjectName("gridLayout_3")
-        self.pushButton_2 = QtWidgets.QPushButton(Form)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(120, 0))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.gridLayout_3.addWidget(self.pushButton_2, 1, 1, 1, 1)
+        self.horizontalLayout_4.addWidget(self.label_5)
+        self.label_14 = QtWidgets.QLabel(Form)
+        self.label_14.setObjectName("label_14")
+        self.horizontalLayout_4.addWidget(self.label_14)
+        self.gridLayout.addLayout(self.horizontalLayout_4, 5, 1, 1, 1)
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.label_10 = QtWidgets.QLabel(Form)
+        self.label_10.setObjectName("label_10")
+        self.horizontalLayout_8.addWidget(self.label_10)
+        self.label_9 = QtWidgets.QLabel(Form)
+        self.label_9.setObjectName("label_9")
+        self.horizontalLayout_8.addWidget(self.label_9)
+        self.gridLayout.addLayout(self.horizontalLayout_8, 9, 1, 1, 1)
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.label_6 = QtWidgets.QLabel(Form)
+        self.label_6.setObjectName("label_6")
+        self.horizontalLayout_5.addWidget(self.label_6)
+        self.label_13 = QtWidgets.QLabel(Form)
+        self.label_13.setObjectName("label_13")
+        self.horizontalLayout_5.addWidget(self.label_13)
+        self.gridLayout.addLayout(self.horizontalLayout_5, 6, 1, 1, 1)
         self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setMinimumSize(QtCore.QSize(120, 0))
+        self.pushButton.setMinimumSize(QtCore.QSize(60, 40))
+        self.pushButton.setMaximumSize(QtCore.QSize(60, 40))
         self.pushButton.setObjectName("pushButton")
-        self.gridLayout_3.addWidget(self.pushButton, 0, 1, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_3.addItem(spacerItem3, 0, 0, 1, 1)
-        self.gridLayout_4.addLayout(self.gridLayout_3, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.pushButton, 1, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_2.addItem(spacerItem2, 1, 0, 1, 1)
 
-        self.retranslateUi(Form, numeCompletPacient)
+        self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
-        self.pushButton.clicked.connect(lambda: self.AdaugareProgramarePacientBtnClicked(Form, self.plainTextEdit.toPlainText(), self.dateEdit.date(), self.timeEdit.time()))
-
-        self.pushButton_2.clicked.connect(lambda: self.BackToMainGUI(Form, fereastraPrincipala))
-
-    def retranslateUi(self, Form, numeCompletPacient):
+    def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.label_8.setText(_translate("Form", "Sex:"))
+        self.label_11.setText(_translate("Form", "1950603020059"))
+        self.label_2.setText(_translate("Form", "Prenume:"))
+        self.label_3.setText(_translate("Form", "TextLabel"))
+        self.label_4.setText(_translate("Form", "Nume:"))
+        self.label_15.setText(_translate("Form", "TextLabel"))
+        self.label_7.setText(_translate("Form", "CNP:"))
+        self.label_12.setText(_translate("Form", "TextLabel"))
+        self.label_5.setText(_translate("Form", "Data Nasterii:"))
+        self.label_14.setText(_translate("Form", "zi/luna/an"))
+        self.label_10.setText(_translate("Form", "Interventie:"))
+        self.label_9.setText(_translate("Form", "TextLabel"))
+        self.label_6.setText(_translate("Form", "Telefon:"))
+        self.label_13.setText(_translate("Form", "0747045999"))
+        self.pushButton.setText(_translate("Form", "PushButton"))
 
-        prenumePacient = numeCompletPacient.split(' ')[0]
-        numePacient = numeCompletPacient.split(' ')[1]
 
-        Form.setWindowTitle(_translate("Form", "Aplicatie Medicala"))
-        #self.groupBox.setTitle(_translate("Form", "Date Pacient"))
-        self.label_4.setText(_translate("Form", "Ora Programare"))
-        self.label_5.setText(_translate("Form", "Data Programare"))
-        self.label.setText(_translate("Form", numePacient))
-        self.label_2.setText(_translate("Form", prenumePacient))
-        self.pushButton.setText(_translate("Form", "Adauga Pogramare"))
-        self.pushButton_2.setText(_translate("Form", "Back"))
-        self.label_3.setText(_translate("Form", "Interventie"))
-    
-    def BackToMainGUI(self, Form, fereastraPrincipala):
-        print('backToMainGUI')
-        Form.deleteLater()
-        ShowMainGuiCallback()
-
-    def AdaugareProgramarePacientBtnClicked(self, Form, interventie, data, ora):
-        print('Adauga Programare Pacient')
-        Form.hide()
-        ShowMainGuiCallback()
-
-        nume = self.label.text()
-        prenume = self.label_2.text()
-        dataProgramare = data.toPyDate()
-        Programare = ClasaProgramari.Programare(interventie, dataProgramare, ora, prenume, nume)
-
-        
-        
-        # verifica programare
-        existaProgramare = ClasaDB.VerificaExistentaProgramare(self, data, ora)
-        
-        if(existaProgramare):
-            dialog = QMessageBox()
-            dialog.setWindowTitle("Aplicatie Medicala")
-            dialog.setText("Aveti deja o programare la aceasta ora!")
-            dialog.setIcon(QMessageBox.Warning)
-            dialog.exec_()
-        else:
-            ClasaDB.AdaugareProgramareDB(Programare)
-
-    def Back(self):
-        print('Back')
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())

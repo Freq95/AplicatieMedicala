@@ -1,15 +1,17 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'D:\03_Projects\AplicatieMedicala\programare.ui'
+#
+# Created by: PyQt5 UI code generator 5.13.1
+#
+# WARNING! All changes made in this file will be lost!
+
+
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget, QMessageBox, QLineEdit, QApplication, QMessageBox, QSizePolicy
-from InterfataMainGUI import ShowMainGuiCallback
 
-import datetime
-import ClasaProgramari, ClasaDB
 
-class Programare(object):
-    def setupUi(self, Form, numeCompletPacient, fereastraPrincipala):
-        
-        now = datetime.datetime.now()
-        
+class Ui_Form(object):
+    def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(250, 396)
         Form.setMinimumSize(QtCore.QSize(250, 0))
@@ -124,7 +126,6 @@ class Programare(object):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
         Form.setPalette(palette)
-
         self.gridLayout_4 = QtWidgets.QGridLayout(Form)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.gridLayout = QtWidgets.QGridLayout()
@@ -152,28 +153,24 @@ class Programare(object):
         self.gridLayout_4.addLayout(self.gridLayout, 0, 0, 1, 1)
         self.gridLayout_2 = QtWidgets.QGridLayout()
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.dateEdit = QtWidgets.QDateEdit(Form)
-        self.dateEdit.setMinimumSize(QtCore.QSize(120, 0))
-        self.dateEdit.setCalendarPopup(True)
-        self.dateEdit.setObjectName("dateEdit")
-        self.dateEdit.setDateTime(QtCore.QDateTime(QtCore.QDate(now.year, now.month, now.day), QtCore.QTime(0, 0, 0)))
-        self.gridLayout_2.addWidget(self.dateEdit, 1, 1, 1, 1)
         self.timeEdit = QtWidgets.QTimeEdit(Form)
         self.timeEdit.setMinimumSize(QtCore.QSize(120, 0))
         self.timeEdit.setCalendarPopup(True)
         self.timeEdit.setObjectName("timeEdit")
         self.gridLayout_2.addWidget(self.timeEdit, 0, 1, 1, 1)
-        
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_2.addItem(spacerItem2, 0, 2, 1, 1)
+        self.dateEdit = QtWidgets.QDateEdit(Form)
+        self.dateEdit.setMinimumSize(QtCore.QSize(120, 0))
+        self.dateEdit.setCalendarPopup(True)
+        self.dateEdit.setObjectName("dateEdit")
+        self.gridLayout_2.addWidget(self.dateEdit, 1, 1, 1, 1)
         self.label_4 = QtWidgets.QLabel(Form)
         self.label_4.setObjectName("label_4")
         self.gridLayout_2.addWidget(self.label_4, 0, 0, 1, 1)
-
         self.label_5 = QtWidgets.QLabel(Form)
         self.label_5.setObjectName("label_5")
         self.gridLayout_2.addWidget(self.label_5, 1, 0, 1, 1)
-
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_2.addItem(spacerItem2, 0, 1, 1, 1)
         self.gridLayout_4.addLayout(self.gridLayout_2, 1, 0, 1, 1)
         self.gridLayout_3 = QtWidgets.QGridLayout()
         self.gridLayout_3.setObjectName("gridLayout_3")
@@ -189,57 +186,27 @@ class Programare(object):
         self.gridLayout_3.addItem(spacerItem3, 0, 0, 1, 1)
         self.gridLayout_4.addLayout(self.gridLayout_3, 2, 0, 1, 1)
 
-        self.retranslateUi(Form, numeCompletPacient)
+        self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
-        self.pushButton.clicked.connect(lambda: self.AdaugareProgramarePacientBtnClicked(Form, self.plainTextEdit.toPlainText(), self.dateEdit.date(), self.timeEdit.time()))
-
-        self.pushButton_2.clicked.connect(lambda: self.BackToMainGUI(Form, fereastraPrincipala))
-
-    def retranslateUi(self, Form, numeCompletPacient):
+    def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-
-        prenumePacient = numeCompletPacient.split(' ')[0]
-        numePacient = numeCompletPacient.split(' ')[1]
-
         Form.setWindowTitle(_translate("Form", "Aplicatie Medicala"))
-        #self.groupBox.setTitle(_translate("Form", "Date Pacient"))
+        self.label.setText(_translate("Form", "TextLabel"))
+        self.label_2.setText(_translate("Form", "TextLabel"))
+        self.label_3.setText(_translate("Form", "Interventie"))
+        self.timeEdit.setDisplayFormat(_translate("Form", "hh:mm AP"))
         self.label_4.setText(_translate("Form", "Ora Programare"))
         self.label_5.setText(_translate("Form", "Data Programare"))
-        self.label.setText(_translate("Form", numePacient))
-        self.label_2.setText(_translate("Form", prenumePacient))
-        self.pushButton.setText(_translate("Form", "Adauga Pogramare"))
         self.pushButton_2.setText(_translate("Form", "Back"))
-        self.label_3.setText(_translate("Form", "Interventie"))
-    
-    def BackToMainGUI(self, Form, fereastraPrincipala):
-        print('backToMainGUI')
-        Form.deleteLater()
-        ShowMainGuiCallback()
+        self.pushButton.setText(_translate("Form", "Adauga Programare"))
 
-    def AdaugareProgramarePacientBtnClicked(self, Form, interventie, data, ora):
-        print('Adauga Programare Pacient')
-        Form.hide()
-        ShowMainGuiCallback()
 
-        nume = self.label.text()
-        prenume = self.label_2.text()
-        dataProgramare = data.toPyDate()
-        Programare = ClasaProgramari.Programare(interventie, dataProgramare, ora, prenume, nume)
-
-        
-        
-        # verifica programare
-        existaProgramare = ClasaDB.VerificaExistentaProgramare(self, data, ora)
-        
-        if(existaProgramare):
-            dialog = QMessageBox()
-            dialog.setWindowTitle("Aplicatie Medicala")
-            dialog.setText("Aveti deja o programare la aceasta ora!")
-            dialog.setIcon(QMessageBox.Warning)
-            dialog.exec_()
-        else:
-            ClasaDB.AdaugareProgramareDB(Programare)
-
-    def Back(self):
-        print('Back')
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())

@@ -304,14 +304,14 @@ def afisareInfoPacient(self, numePacient):
 
         for row in rows:
             _translate = QtCore.QCoreApplication.translate
-            self.label_2.setText(_translate("Form", row[1]))
+            self.label_15.setText(_translate("Form", row[1]))
             self.label_3.setText(_translate("Form", row[2]))
             dataNasterii = row[5]  +  '/'  +  row[4] +  '/'  +  row[3]
-            self.label_4.setText(_translate("Form", dataNasterii))
-            self.label_5.setText(_translate("Form", row[6]))
-            self.label_6.setText(_translate("Form", row[7]))
+            self.label_14.setText(_translate("Form", dataNasterii))
+            self.label_13.setText(_translate("Form", row[6]))
+            self.label_12.setText(_translate("Form", row[7]))
             
-            self.label_7.setText(_translate("Form", row[8]))
+            self.label_11.setText(_translate("Form", row[8]))
 
         
 def AdaugaDocumentInDB(Document):
