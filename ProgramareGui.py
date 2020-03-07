@@ -11,7 +11,7 @@ class Programare(object):
         now = datetime.datetime.now()
         
         Form.setObjectName("Form")
-        Form.resize(350, 700)
+        #Form.resize(350, 700)
         Form.setMinimumSize(QtCore.QSize(300, 0))
         Form.setMaximumSize(QtCore.QSize(350, 700))
         palette = QtGui.QPalette()
@@ -169,6 +169,7 @@ class Programare(object):
         self.dateEdit.setMinimumSize(QtCore.QSize(120, 0))
         self.dateEdit.setCalendarPopup(True)
         self.dateEdit.setObjectName("dateEdit")
+        self.dateEdit.setDateTime(QtCore.QDateTime(QtCore.QDate(now.year, now.month, now.day), QtCore.QTime(0, 0, 0)))
         self.gridLayout_2.addWidget(self.dateEdit, 2, 1, 1, 1)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem2, 1, 2, 1, 1)

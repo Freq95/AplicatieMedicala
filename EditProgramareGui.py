@@ -1,12 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget, QMessageBox, QLineEdit, QApplication, QMessageBox, QSizePolicy
 
+import PacientGui
 import ClasaDB, ClasaPacienti, ClasaProgramari, InterfataMainGUI
 
 class EditProgramare(object):
     def setupUi(self, Form, programarePacient, dataProgramare, fereastraPrincipala):
         Form.setObjectName("Form")
-        Form.resize(400, 629)
+        #Form.resize(400, 629)
 
         # extragem din programare pacient nume si prenume pacient
         vectorProgramarePacient = programarePacient.split()
@@ -282,27 +283,31 @@ class EditProgramare(object):
         else:
             sex = 'F'
         
-        Pacient = ClasaPacienti.Pacient(self.lineEdit_2.text(),
-                                        self.lineEdit.text(),
-                                        'an',
-                                        'luna',
-                                        'zi',
-                                        self.lineEdit_4.text(),
-                                        self.lineEdit_3.text(),
-                                        sex)
+        cnp = self.lineEdit_3.text()
+        [an, luna, zi, sexul] = PacientGui.cnpToDataNasteriiAndSex(cnp)
 
-        Programare = ClasaProgramari.Programare(self.plainTextEdit.toPlainText(),
-                                                self.dateTimeEdit.date(),
-                                                self.dateTimeEdit.time(),
-                                                self.lineEdit_2.text(),
-                                                self.lineEdit.text(),                                                
-                                                )
+        if (an != None):
+            Pacient = ClasaPacienti.Pacient(self.lineEdit_2.text(),
+                                            self.lineEdit.text(),
+                                            an,
+                                            luna,
+                                            zi,
+                                            self.lineEdit_4.text(),
+                                            self.lineEdit_3.text(),
+                                            sex)
 
-        ClasaDB.UpdatePacientiProgramari(self, Pacient, Programare, indexPacient, indexProgramare)
+            Programare = ClasaProgramari.Programare(self.plainTextEdit.toPlainText(),
+                                                    self.dateTimeEdit.date(),
+                                                    self.dateTimeEdit.time(),
+                                                    self.lineEdit_2.text(),
+                                                    self.lineEdit.text(),                                                
+                                                    )
 
-        Form.deleteLater()
-        InterfataMainGUI.ShowMainGuiCallback()
-    
+            ClasaDB.UpdatePacientiProgramari(self, Pacient, Programare, indexPacient, indexProgramare)
+
+            Form.deleteLater()
+            InterfataMainGUI.ShowMainGuiCallback()
+        
     def InapoiMeniuPrincipal(self, fereastraPrincipala, Form):
         Form.deleteLater()
         InterfataMainGUI.ShowMainGuiCallback()

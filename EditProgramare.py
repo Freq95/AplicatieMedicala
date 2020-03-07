@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class EditProgramare(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(349, 741)
+        #Form.resize(349, 741)
         self.pushButton = QtWidgets.QPushButton(Form)
         self.pushButton.setGeometry(QtCore.QRect(230, 680, 75, 23))
         self.pushButton.setObjectName("pushButton")

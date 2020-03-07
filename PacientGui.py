@@ -5,10 +5,47 @@ import ClasaDB, ClasaPacienti
 import ViewPacientGui, ProgramareGui, DocumentGui
 from InterfataMainGUI import ShowMainGuiCallback, HideMainGuiCallback
 
+def cnpToDataNasteriiAndSex(cnp):
+    cnpValid = (len(cnp) == 13 or len(cnp) == 0) and (cnp.isdigit() or len(cnp) == 0)
+
+    if cnpValid and (len(cnp) != 0):
+        an = cnp[1] + cnp[2]
+        luna = cnp[3] + cnp[4]
+        zi = cnp[5] + cnp[6]
+        sex = cnp[0]
+        
+        if sex == '1' or sex == '5' or sex == '7':
+            sexul = 'M'
+        elif sex == '2' or sex == '6' or sex == '8':
+            sexul = 'F'
+        else:
+            dialog = QMessageBox()
+            dialog.setWindowTitle("Warning")
+            dialog.setText("CNP invalid.")
+            dialog.setIcon(QMessageBox.Warning)
+            dialog.exec_()   
+            return [None, None, None, None]
+
+        if sex == '1' or sex == '2':
+            an = '19' + an
+        elif sex == '5' or sex == '6':
+            an = '20' + an
+        elif (sex == '7' or sex == '8') and an > '25':
+            an = '19' + an
+        else:
+            an = '20' + an
+    else:
+        an = ''
+        luna = ''
+        zi = ''
+        sexul = ''
+
+    return [an, luna, zi, sexul]
+
 class Pacient(object):
     def setupUi(self, Form, fereastraPrincipala):
         Form.setObjectName("Form")
-        Form.resize(300, 550)
+        #Form.resize(300, 550)
         Form.setMinimumSize(QtCore.QSize(0, 550))
         Form.setMaximumSize(QtCore.QSize(300, 16777215))
         palette = QtGui.QPalette()
@@ -324,49 +361,19 @@ class Pacient(object):
             dialog.exec_()   
             return None
 
+        [an, luna, zi, sexul] = cnpToDataNasteriiAndSex(cnp)
 
-        if cnpValid and (len(cnp) != 0):
-            an = cnp[1] + cnp[2]
-            luna = cnp[3] + cnp[4]
-            zi = cnp[5] + cnp[6]
-            sex = cnp[0]
-            
-            if sex == '1' or sex == '5' or sex == '7':
-                sexul = 'M'
-            elif sex == '2' or sex == '6' or sex == '8':
-                sexul = 'F'
-            else:
-                dialog = QMessageBox()
-                dialog.setWindowTitle("Warning")
-                dialog.setText("CNP invalid.")
-                dialog.setIcon(QMessageBox.Warning)
-                dialog.exec_()   
-                return None
-
-            if sex == '1' or sex == '2':
-                an = '19' + an
-            elif sex == '5' or sex == '6':
-                an = '20' + an
-            elif (sex == '7' or sex == '8') and an > '25':
-                an = '19' + an
-            else:
-                an = '20' + an
-        else:
-            an = ''
-            luna = ''
-            zi = ''
-            sexul = ''
-        
-        Pacient = ClasaPacienti.Pacient(prenume, 
-                                        nume, 
-                                        an, 
-                                        luna, 
-                                        zi, 
-                                        telefon, 
-                                        cnp, 
-                                        sexul)
-                                        
-        ClasaDB.AdaugarePacientDB(self,Pacient)
+        if (an != None):
+            Pacient = ClasaPacienti.Pacient(prenume, 
+                                            nume, 
+                                            an, 
+                                            luna, 
+                                            zi, 
+                                            telefon, 
+                                            cnp, 
+                                            sexul)
+                                            
+            ClasaDB.AdaugarePacientDB(self,Pacient)
 
     def AdaugareProgramareBtnClicked(self, Form, selection): 
         print("Gui Programare")

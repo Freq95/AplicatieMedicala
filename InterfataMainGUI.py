@@ -10,7 +10,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget, QMessageBox, QLineEdit, QApplication, QMessageBox, QSizePolicy
 
-
 import sys, datetime, calendar
 import ClasaDB, ClasaPacienti, ClasaProgramari, ClasaDocuments
 import PacientGui, EditProgramareGui, ViewPacientGui
@@ -18,7 +17,7 @@ import PacientGui, EditProgramareGui, ViewPacientGui
 class Main(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(950, 650)
+        #Dialog.resize(950, 650)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)  
         sizePolicy.setVerticalStretch(0)
@@ -216,7 +215,7 @@ class Main(object):
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
-        font.setPointSize(60)
+        font.setPointSize(45)
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.gridLayout_2.addWidget(self.label, 0, 0, 4, 1)
@@ -392,7 +391,7 @@ class Main(object):
             dialog.exec_()
 
     def  ListDoubleClickCallback2(self):
-        print('2-1')
+        '''print('2-1')
         row = self.listWidget.currentRow()
         item = self.listWidget.item(row)
         
@@ -404,7 +403,20 @@ class Main(object):
             self.viewPacientUI.setupUi(self.Form, numePacientSelectat, self, dataProgramare)
             self.Form.setWindowTitle('Aplicatie Medicala')
             self.Form.show()
-            Dialog.hide()
+            Dialog.hide()'''
+        print('Afisare Pacienti')
+        self.Form = QtWidgets.QWidget()
+        self.viewPacientUI = ViewPacientGui.ViewPacient()
+
+        selection = ''
+        for item in self.listWidget.selectedItems():
+            selection = item.text()
+
+        numePacient = selection
+
+        self.viewPacientUI.setupUi(self.Form, numePacient, self)
+        self.Form.setWindowTitle('Aplicatie Medicala')
+        self.Form.show()
 
 def ShowMainGuiCallback():
     Dialog.show()

@@ -1,12 +1,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget, QMessageBox, QLineEdit, QApplication, QMessageBox, QSizePolicy
 from InterfataMainGUI import ShowMainGuiCallback
+
 import ClasaDB
+import pathlib, os, PyPDF2
 
 class ViewPacient(object):
     def setupUi(self, Form, numePacientSelectat, fereastraPrincipala, data = None):
         Form.setObjectName("Form")
-        Form.resize(510, 429)
+        #Form.resize(510, 429)
         Form.setMinimumSize(QtCore.QSize(485, 400))
         Form.setMaximumSize(QtCore.QSize(510, 510))
         palette = QtGui.QPalette()

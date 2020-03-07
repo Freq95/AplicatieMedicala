@@ -10,7 +10,7 @@ class Document(object):
     def setupUi(self, Form, numePacient):
         
         Form.setObjectName("Form")
-        Form.resize(400, 620)
+        #Form.resize(400, 620)
         Form.setMinimumSize(QtCore.QSize(400, 620))
         Form.setMaximumSize(QtCore.QSize(400, 620))
         print("Docs  GUI NumePacient = " +  numePacient)
