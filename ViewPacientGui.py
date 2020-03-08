@@ -120,7 +120,10 @@ class ViewPacient(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
+        
         Form.setPalette(palette)
+        Form.setWindowOpacity(0.95)
+
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout()

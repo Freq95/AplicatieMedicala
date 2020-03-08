@@ -210,9 +210,9 @@ class Pacient(object):
         self.label_2 = QtWidgets.QLabel(self.tab)
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
-        self.lineEdit = QtWidgets.QLineEdit(self.tab)
-        self.lineEdit.setObjectName("lineEdit")
-        self.gridLayout.addWidget(self.lineEdit, 0, 1, 1, 1)
+        self.lineEdit_6 = QtWidgets.QLineEdit(self.tab)
+        self.lineEdit_6.setObjectName("lineEdit_6")
+        self.gridLayout.addWidget(self.lineEdit_6, 0, 1, 1, 1)
         self.gridLayout_4.addLayout(self.gridLayout, 2, 0, 1, 1)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_4.addItem(spacerItem1, 1, 0, 1, 1)
@@ -337,7 +337,7 @@ class Pacient(object):
         Form.hide()
         ShowMainGuiCallback()
 
-        prenume = self.lineEdit.text()
+        prenume = self.lineEdit_6.text()
         if(prenume.find(' ') >= 0) or (prenume.find('-') >= 0):
             dialog = QMessageBox()
             dialog.setWindowTitle("Aplicatie Medicala")

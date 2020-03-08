@@ -157,6 +157,8 @@ class Document(object):
         button.setFlat(True)
       
         Form.setWindowTitle('Aplicatie Medicala')
+        Form.setWindowOpacity(0.95)
+
         button.setGeometry(QtCore.QRect(0, 210, 401, 411))
 
         self.retranslateUi(Form)
@@ -194,54 +196,62 @@ class Button(QPushButton):
     def dropEvent(self, event):
         data = event.mimeData()
         urls = data.urls()
-        if urls and urls[0].scheme() == 'file':
-            filepath = str(urls[0].path())[1:]
-            pacient = self.text()
-            path, fileName = os.path.split(filepath)
-            #path = os.getcwd() # current path
-            #rootDirectory = path  + "\\DocumentePacienti"
-            (prenume, nume) = pacient.split(maxsplit=1)
 
-            pacientDirectory  = "\\DocumentePacienti\\" +  prenume + "_" + nume
-            copiedFile = pacientDirectory  + "\\" + fileName
-            
-            extension = copiedFile.split('.')
-            extension = extension[len(extension) - 1]
-            extension = extension.upper()
-            
-            #check if the file format is correct
-            if (extension == "PDF" or extension == "JPG" or extension == "PNG" or extension == "JPEG" or extension == "BMP" or extension == "SL"):
-                
-                AdaugaDocumente(filepath, pacient)                    
+        contorFisiere = 0
+        listaFisiere = []
 
-                
-                document = copiedFile
+        for i in range(len(urls)):
+            if urls and urls[i].scheme() == 'file':
+                filepath = str(urls[i].path())[1:]
+                pacient = self.text()
+                path, fileName = os.path.split(filepath)
+                (prenume, nume) = pacient.split(maxsplit=1)
 
-                Document = ClasaDocuments.Documents(prenume, nume, document)
-                ClasaDB.AdaugaDocumentInDB(Document)                        
+                pacientDirectory  = "\\DocumentePacienti\\" +  prenume + "_" + nume
+                copiedFile = pacientDirectory  + "\\" + fileName
                 
-                if os.path.isfile(os.getcwd() + copiedFile):
-                    dialog1 = QMessageBox()
-                    #dialog.setIcon(QMessageBox.Question)
-                    #QMessageBox.Information
-                    dialog1.setWindowTitle("Aplicatie Medicala")
-                    dialog1.setText("Fisierul a fost adaugat cu succes.")
-                    dialog1.setIcon(QMessageBox.Information)
-                    dialog1.exec_()
+                extension = copiedFile.split('.')
+                extension = extension[len(extension) - 1]
+                extension = extension.upper()
+                
+                #check if the file format is correct
+                if (extension == "PDF" or extension == "JPG" or extension == "PNG" or extension == "JPEG" or extension == "BMP" or extension == "SL"):
+                    AdaugaDocumente(filepath, pacient)                    
+                    document = copiedFile
+                    Document = ClasaDocuments.Documents(prenume, nume, document)
+                    ClasaDB.AdaugaDocumentInDB(Document)                        
+                    
+                    if os.path.isfile(os.getcwd() + copiedFile):
+                        contorFisiere = contorFisiere + 1
+                    else:
+                        listaFisiere.append(fileName)
+
                 else:
-                    dialog2 = QMessageBox()
-                    #dialog.setIcon(QMessageBox.Question)
-                    #QMessageBox.Information
-                    dialog2.setWindowTitle("Aplicatie Medicala")
-                    dialog2.setText("Fisierul NU a fost adaugat!")
-                    dialog2.setIcon(QMessageBox.Critical)
-                    dialog2.exec_()
-            else:
-                dialog3 = QMessageBox()
-                dialog3.setWindowTitle("Fisier Invalid")
-                dialog3.setText("Incearca fisiere PDF sau imagini!")
-                dialog3.setIcon(QMessageBox.Critical)
-                dialog3.exec_()
+                    listaFisiere.append(fileName)
+                    '''
+                    dialog3 = QMessageBox()
+                    dialog3.setWindowTitle("Aplicatie Medicala")
+                    dialog3.setText("Fisierul: " + fileName + " nu respecta formatul!")
+                    dialog3.setIcon(QMessageBox.Warning)
+                    dialog3.exec_()
+                    '''
+
+        if contorFisiere == len(urls):
+            dialog1 = QMessageBox()
+            dialog1.setWindowTitle("Aplicatie Medicala")
+            dialog1.setText("Adaugare cu succes.")
+            dialog1.setIcon(QMessageBox.Information)
+            dialog1.exec_()
+        else:
+            mesajFisiere = ''
+            for i in range(len(listaFisiere)):
+                mesajFisiere = mesajFisiere + '\n' + listaFisiere[i]
+
+            dialog2 = QMessageBox()
+            dialog2.setWindowTitle("Aplicatie Medicala")
+            dialog2.setText("Urmatoarele fisiere NU respecta formatul:\n" + mesajFisiere)
+            dialog2.setIcon(QMessageBox.Critical)
+            dialog2.exec_()
 
 
 
