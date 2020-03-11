@@ -1,6 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget, QMessageBox, QLineEdit, QApplication, QMessageBox, QSizePolicy
+from PyQt5.QtWidgets import QListWidgetItem, QLabel, QGridLayout, QHBoxLayout, QPushButton, QWidget, QMessageBox, QLineEdit, QApplication, QMessageBox, QSizePolicy
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt, QSize
 from InterfataMainGUI import ShowMainGuiCallback
+from PyQt5.QtWidgets import QBoxLayout
 
 import ClasaDB
 import pathlib, os, PyPDF2
@@ -8,9 +11,8 @@ import pathlib, os, PyPDF2
 class ViewPacient(object):
     def setupUi(self, Form, numePacientSelectat, fereastraPrincipala, data = None):
         Form.setObjectName("Form")
-        #Form.resize(510, 429)
         Form.setMinimumSize(QtCore.QSize(485, 400))
-        Form.setMaximumSize(QtCore.QSize(510, 510))
+        Form.setMaximumSize(QtCore.QSize(1000, 510))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -122,27 +124,9 @@ class ViewPacient(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
         
         Form.setPalette(palette)
-        Form.setWindowOpacity(0.95)
 
-        self.gridLayout_2 = QtWidgets.QGridLayout(Form)
-        self.gridLayout_2.setObjectName("gridLayout_2")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.horizontalLayout.addItem(spacerItem)
-        self.listWidget = QtWidgets.QListWidget(Form)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.listWidget.sizePolicy().hasHeightForWidth())
-        self.listWidget.setSizePolicy(sizePolicy)
-        self.listWidget.setMinimumSize(QtCore.QSize(200, 0))
-        self.listWidget.setMaximumSize(QtCore.QSize(200, 16777215))
-        self.listWidget.setObjectName("listWidget")
-        self.horizontalLayout.addWidget(self.listWidget)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.horizontalLayout.addItem(spacerItem1)
-        self.gridLayout_2.addLayout(self.horizontalLayout, 0, 1, 1, 1)
+        self.gridLayout_4 = QtWidgets.QGridLayout(Form)
+        self.gridLayout_4.setObjectName("gridLayout_4")
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
         self.label = QtWidgets.QLabel(Form)
@@ -216,28 +200,44 @@ class ViewPacient(object):
         self.label_13.setObjectName("label_13")
         self.horizontalLayout_5.addWidget(self.label_13)
         self.gridLayout.addLayout(self.horizontalLayout_5, 6, 1, 1, 1)
-        
-        self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_2.addItem(spacerItem2, 1, 0, 1, 1)
-
-        if data != None:
-            self.pushButton = QtWidgets.QPushButton(Form)
-            self.pushButton.setMinimumSize(QtCore.QSize(60, 40))
-            self.pushButton.setMaximumSize(QtCore.QSize(60, 40))
-            self.pushButton.setObjectName("pushButton")
-            self.gridLayout.addWidget(self.pushButton, 1, 0, 1, 1)
-            #self.pushButton.setIcon(QtGui.QIcon("icons/leftArrow2.png"))
-
-            '''
-            self.pushButton = QtWidgets.QPushButton(Form)
-            self.pushButton.setGeometry(QtCore.QRect(5, 5, 35, 35))
-            self.pushButton.setObjectName("pushButton")
-            self.pushButton.setIconSize(QtCore.QSize(40, 40))
-            '''
-
-            self.pushButton.clicked.connect(lambda: self.BackToMainGUI(Form, fereastraPrincipala))
-        #self.pushButton.clicked.connect(Form.close)
+        '''
+        self.pushButton = QtWidgets.QPushButton(Form)
+        self.pushButton.setMinimumSize(QtCore.QSize(60, 40))
+        self.pushButton.setMaximumSize(QtCore.QSize(60, 40))
+        self.pushButton.setObjectName("pushButton")
+        self.gridLayout.addWidget(self.pushButton, 1, 0, 1, 1)
+        '''
+        self.gridLayout_4.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem = QtWidgets.QSpacerItem(40, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.horizontalLayout.addItem(spacerItem)
+        self.listWidget = QtWidgets.QListWidget(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.listWidget.sizePolicy().hasHeightForWidth())
+        self.listWidget.setSizePolicy(sizePolicy)
+        self.listWidget.setMinimumSize(QtCore.QSize(200, 0))
+        self.listWidget.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.listWidget.setObjectName("listWidget")
+        self.horizontalLayout.addWidget(self.listWidget)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.horizontalLayout.addItem(spacerItem1)
+        self.gridLayout_4.addLayout(self.horizontalLayout, 0, 1, 1, 1)
+        self.gridLayout_2 = QtWidgets.QGridLayout()
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.label_16 = QtWidgets.QLabel(Form)
+        self.label_16.setMinimumSize(QtCore.QSize(400, 350))
+        self.label_16.setMaximumSize(QtCore.QSize(400, 350))
+        self.label_16.setText("")
+        self.label_16.setPixmap(QtGui.QPixmap("icons/Photo-icon.png"))
+        self.label_16.setScaledContents(True)
+        self.label_16.setObjectName("label_16")
+        self.gridLayout_2.addWidget(self.label_16, 0, 0, 1, 1)
+        self.gridLayout_4.addLayout(self.gridLayout_2, 0, 2, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 40, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_4.addItem(spacerItem2, 1, 0, 1, 1)
 
         self.retranslateUi(Form, numePacientSelectat, data)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -246,11 +246,36 @@ class ViewPacient(object):
 
         self.listWidget = ClasaDB.BazaDate.UpdateListWithDocuments(self, self.listWidget, numePacientSelectat)
         self.listWidget.doubleClicked.connect(lambda: self.OpenDocument(numePacientSelectat))
-        #self.pushButton_3.clicked.connect(lambda: self.OpenDocument(numePacientSelectat))
+        self.listWidget.itemSelectionChanged.connect(lambda: self.ShowImage(numePacientSelectat))
     
     def close(self):
         self.close() 
-    
+
+    def ShowImage(self, numePacientSelectat):
+        validImgExtensions = ['.bmp', '.jpg', '.jpeg', '.png']
+ 
+        row = self.listWidget.currentRow()
+        item = self.listWidget.item(row)
+        numeDocument = str(item.text())
+        print('show ' + numeDocument)
+
+        typeOfFile = pathlib.Path(numeDocument).suffix
+        typeOfFile = typeOfFile.lower()
+        if typeOfFile == ".pdf":
+            self.label_16.setPixmap(QtGui.QPixmap("icons/pdfIcon.png"))
+        
+        elif validImgExtensions.__contains__(typeOfFile):
+            prenume =  numePacientSelectat.split(' ')[0]
+            nume = numePacientSelectat.split(' ')[1]
+
+            #create path to file
+            path = os.getcwd() # current path
+            path = path + "\\DocumentePacienti\\" + prenume + '_' + nume + '\\' + numeDocument
+            self.label_16.setPixmap(QtGui.QPixmap(path))
+        
+        else:
+            self.label_16.setPixmap(QtGui.QPixmap("icons/file.png"))
+
     def OpenDocument(self, numePacientSelectat):
         row = self.listWidget.currentRow()
         item = self.listWidget.item(row)
@@ -284,7 +309,7 @@ class ViewPacient(object):
                 dialog.setWindowTitle("Aplicatie Medicala")
                 dialog.setText("Fisierul nu poate fi deschis.\nNu s-a gasit metoda de afisare a fisierului.\nExtensia fisierului este: " + typeOfFile + "\nECalea: " + path)
                 dialog.setIcon(QMessageBox.Warning)
-                dialog.exec_()  
+                dialog.exec_()
 
     def BackToMainGUI(self, Form, fereastraPrincipala):
         Form.deleteLater()
@@ -293,12 +318,10 @@ class ViewPacient(object):
     def retranslateUi(self, Form, pacient, data):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Aplicatie Medicala"))
-        #self.label_10.setText(_translate("Form", "1"))
         self.label_11.setText(_translate("Form", "2"))
         self.label_12.setText(_translate("Form", "3"))
         self.label_13.setText(_translate("Form", "4"))
         self.label_14.setText(_translate("Form", "5"))
-        #self.label_15.setText(_translate("Form", "6"))
         
         self.label_2.setText(_translate("Form", "Prenume:"))
         self.label_4.setText(_translate("Form", "Nume:"))
@@ -320,8 +343,3 @@ class ViewPacient(object):
 
             self.label_10.setText(_translate("Form", "Interventie:"))
             self.label_9.setText(_translate("Form", interventie))
-
-            #self.pushButton.setText(_translate("Form", ""))
-            self.pushButton.setText(_translate("Form", ""))
-
-

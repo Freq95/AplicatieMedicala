@@ -1,18 +1,52 @@
-# -*- coding: utf-8 -*-
-
-# Dialog implementation generated from reading ui file 'D:\03_Projects\AplicatieMedicala\test22.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.1
-#
-# WARNING! All changes made in this file will be lost!
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QDate, QPoint, Qt
 from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget, QMessageBox, QLineEdit, QApplication, QMessageBox, QSizePolicy
 
 import sys, datetime, calendar
 import ClasaDB, ClasaPacienti, ClasaProgramari, ClasaDocuments
 import PacientGui, EditProgramareGui, ViewPacientGui
+
+class CalendarWidget(QtWidgets.QCalendarWidget):
+    def __init__(self, parent=None):
+        super(CalendarWidget, self).__init__(parent,
+            verticalHeaderFormat=QtWidgets.QCalendarWidget.NoVerticalHeader,
+            gridVisible=False)
+
+    def paintCell(self, painter, rect, date):
+        appointmentsList, dateOccurence = ClasaDB.GetAppiontmentsFromDB(self)
+        qtDate = []
+
+        for appoint in appointmentsList:
+            qtDate.append(QtCore.QDate.fromString(appoint, 'yyyy-MM-dd'))
+
+        if date == self.selectedDate():
+            painter.save()
+            painter.fillRect(rect, QtGui.QColor("white")) # current selection background color
+            painter.setPen(QtCore.Qt.NoPen)
+            painter.setBrush(QtGui.QColor("pink")) # current selection circle color #EEB5E5
+            r = QtCore.QRect(QtCore.QPoint(), min(rect.width(), rect.height())*QtCore.QSize(1, 1))
+            r.moveCenter(rect.center())
+            painter.drawEllipse(r)
+            painter.setPen(QtGui.QPen(QtGui.QColor("black"))) # current selection calendar number
+            
+            painter.drawText(rect, QtCore.Qt.AlignCenter, str(date.day()))
+
+            painter.restore()
+        else:
+            super(CalendarWidget, self).paintCell(painter, rect, date)
+        
+        # draw days with appoints
+        if qtDate.__contains__(date):
+            occurance = dateOccurence[date.toString('yyyy-MM-dd')]
+            if occurance > 6:
+                painter.setBrush(Qt.red)
+                painter.drawEllipse(rect.topLeft() + QPoint(12, 7), 3, 3)
+            elif occurance > 3:
+                painter.setBrush(QtGui.QColor("orange"))
+                painter.drawEllipse(rect.topLeft() + QPoint(12, 7), 3, 3)
+            elif occurance > 0:
+                painter.setBrush(Qt.yellow)
+                painter.drawEllipse(rect.topLeft() + QPoint(12, 7), 3, 3)
 
 class Main(object):
     def setupUi(self, Dialog):
@@ -147,7 +181,9 @@ class Main(object):
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         spacerItem = QtWidgets.QSpacerItem(30, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.horizontalLayout_3.addItem(spacerItem)
-        self.calendarWidget = QtWidgets.QCalendarWidget(Dialog)
+        
+        #self.calendarWidget = QtWidgets.QCalendarWidget(Dialog)
+        self.calendarWidget = CalendarWidget()
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -156,6 +192,11 @@ class Main(object):
         self.calendarWidget.setMinimumSize(QtCore.QSize(400, 463))
         self.calendarWidget.setMaximumSize(QtCore.QSize(2000, 2000))
         self.calendarWidget.setObjectName("calendarWidget")
+        font = QtGui.QFont()
+        font.setFamily("Segoe Print")
+        font.setPointSize(15)
+        self.calendarWidget.setFont(font)
+
         self.horizontalLayout_3.addWidget(self.calendarWidget)
         self.gridLayout_3.addLayout(self.horizontalLayout_3, 0, 1, 2, 1)
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -275,12 +316,6 @@ class Main(object):
         # BUTTON ACTIONS/ 
 
         Dialog.setWindowTitle(_translate("Dialog", "Aplicatie Medicala"))
-        #self.label_3.setText(_translate("Dialog", "februarie 2020"))
-        #self.label_2.setText(_translate("Dialog", "sambata"))
-        
-        #self.label.setText(_translate("Dialog", "25"))
-        
-        
 
 # DISPLAY THE SELECTED DATE FROM CALENDAR
     def SelectDate(self):
@@ -291,7 +326,6 @@ class Main(object):
         listFont.setPointSize(10)
         listFont.setBold(True)
         listFont.setWeight(35)
-
 
         _translate = QtCore.QCoreApplication.translate
         
@@ -305,10 +339,7 @@ class Main(object):
         self.label_2.setText(_translate("Dialog", list[currentSelection.weekday()]))
         self.label_3.setText(_translate("Dialog", calendar.month_name[date.month()] + "  "+ str(date.year())))
 
-
         self.listWidget = ClasaDB.BazaDate.CheckAndAddToListCurrentAppointment(self, self.listWidget, currentSelection)
-        
-        #self.pushButton_6.clicked.connect(lambda: self.ListDoubleClickCallback2())
 
     def StartPacientiGui(self):
         self.Form = QtWidgets.QWidget()
@@ -391,19 +422,6 @@ class Main(object):
             dialog.exec_()
 
     def  ListDoubleClickCallback2(self):
-        '''print('2-1')
-        row = self.listWidget.currentRow()
-        item = self.listWidget.item(row)
-        
-        if item != None:
-            numePacientSelectat = str(item.text())
-            self.Form = QtWidgets.QWidget()
-            self.viewPacientUI = ViewPacientGui.ViewPacient()
-            dataProgramare = self.calendarWidget.selectedDate()
-            self.viewPacientUI.setupUi(self.Form, numePacientSelectat, self, dataProgramare)
-            self.Form.setWindowTitle('Aplicatie Medicala')
-            self.Form.show()
-            Dialog.hide()'''
         print('Afisare Pacienti')
         self.Form = QtWidgets.QWidget()
         self.viewPacientUI = ViewPacientGui.ViewPacient()

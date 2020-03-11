@@ -168,7 +168,6 @@ class Document(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Documente"))
 
-
 class Button(QPushButton):
     def __init__(self, title, parent):
         super().__init__(title, parent)
@@ -176,7 +175,6 @@ class Button(QPushButton):
         self.setAcceptDrops(True)
         print('Titlul  =  '+ title)
         #print('Parintele  =  '+ parent)
-        
 
     def dragEnterEvent(self, event):
         data = event.mimeData()
@@ -184,14 +182,11 @@ class Button(QPushButton):
         if urls and urls[0].scheme() == 'file':
             event.acceptProposedAction()
 
-
-
     def dragMoveEvent(self, event):
         data = event.mimeData()
         urls = data.urls()
         if urls and urls[0].scheme() == 'file':
             event.acceptProposedAction()
-
 
     def dropEvent(self, event):
         data = event.mimeData()
@@ -228,13 +223,6 @@ class Button(QPushButton):
 
                 else:
                     listaFisiere.append(fileName)
-                    '''
-                    dialog3 = QMessageBox()
-                    dialog3.setWindowTitle("Aplicatie Medicala")
-                    dialog3.setText("Fisierul: " + fileName + " nu respecta formatul!")
-                    dialog3.setIcon(QMessageBox.Warning)
-                    dialog3.exec_()
-                    '''
 
         if contorFisiere == len(urls):
             dialog1 = QMessageBox()
@@ -252,10 +240,6 @@ class Button(QPushButton):
             dialog2.setText("Urmatoarele fisiere NU respecta formatul:\n" + mesajFisiere)
             dialog2.setIcon(QMessageBox.Critical)
             dialog2.exec_()
-
-
-
-
 
 def AdaugaDocumente(fileSource, numePacient):    
     path = os.getcwd() # current path

@@ -10,6 +10,8 @@ import ClasaDocuments
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QListWidgetItem
 from PyQt5.QtGui import QColor
+from collections import Counter
+
 
 # conn = sqlite3.connect('pacienti.db')
 # c = conn.cursor()
@@ -211,17 +213,10 @@ class BazaDate(ClasaPacienti.Pacient):
 
         for row in rows:
             if row[2] == currentSelection.isoformat():
-                #self.cursor.execute("SELECT Prenume FROM pacientiDB WHERE Nume=?", (row[0],))
-                #prenume = self.cursor.fetchall()
-                #print(row[0], prenume[0][0])
-                #listWidget.addItem(row[0] + ' ' + prenume[0][0]) 
                 print('Adauga')
-                #listWidget.addItem(row[4] + row [5] + ' : ' + '\n' + row[3])
                 numeP = str(row[4] + ' '  + row [5] + ' \n' + row[3] + '\n')
                 listWidget.addItem(numeP)
                 print(listWidget.count())
-
-                
 
         return listWidget
 
@@ -255,12 +250,10 @@ class BazaDate(ClasaPacienti.Pacient):
 
         return listWidget
 
-    
 def IndexProgramare(self, infoPacient):
     #infoPacient - este rezultatul apelarii functiei InfoPacient
     for row in infoPacient:
             return (row[0])
-
 
 def InfoPacient(self, prenumePacient, numePacient):
     conn = sqlite3.connect('pacienti.db')
@@ -312,8 +305,7 @@ def afisareInfoPacient(self, numePacient):
             self.label_12.setText(_translate("Form", row[7]))
             
             self.label_11.setText(_translate("Form", row[8]))
-
-        
+     
 def AdaugaDocumentInDB(Document):
     DocumentDB = BazaDate()
     DocumentDB.create_table()
@@ -470,5 +462,35 @@ def GetInterventieProgramare(self, nume, prenume, data, ora):
 
     for row in rows:
         return row[1]
+
+def GetAppiontmentsFromDB(self):
+        conn = sqlite3.connect('programari.db')
+            
+        cursor = conn.cursor()
+        self.cursor = cursor
+        today = datetime.date.today()
+        #date = str(today.year) + "-" + str(today.month) + "-" + str(today.day - 1)
+        
+        self.cursor.execute("SELECT * FROM programariDB")
+        rows = self.cursor.fetchall()
+        appointmentsList = []
+
+        for row in rows:
+            data_list = row[2].split('-')
+            an = data_list[0]
+            luna = data_list[1]
+            zi = data_list[2]
+
+            dbCurrentDate = datetime.date(int(an), int(luna), int(zi))
+
+            test = []
+            test.append((today, 5))
+            if( dbCurrentDate >= today):
+                appointmentsList.append(row[2])
+        
+        x = Counter(appointmentsList)
+        
+        # (date, data structure that contains date and how many occurance does that date have)
+        return appointmentsList, x
 
     
