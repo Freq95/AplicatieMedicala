@@ -4,6 +4,7 @@ from InterfataMainGUI import ShowMainGuiCallback
 
 import datetime
 import ClasaProgramari, ClasaDB
+import cssStyle
 
 class Programare(object):
     def setupUi(self, Form, numeCompletPacient, fereastraPrincipala):
@@ -124,6 +125,8 @@ class Programare(object):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
         Form.setPalette(palette)
+        Form.setStyleSheet(cssStyle.css)
+        
         self.gridLayout_4 = QtWidgets.QGridLayout(Form)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.gridLayout = QtWidgets.QGridLayout()
@@ -236,7 +239,7 @@ class Programare(object):
         self.pushButton.setText(_translate("Form", "Adauga Pogramare"))
         self.pushButton_2.setText(_translate("Form", "Back"))
         self.label_3.setText(_translate("Form", "Interventie"))
-    
+        self.timeEdit.setDisplayFormat(_translate("Form", "hh:mm"))
     def BackToMainGUI(self, Form, fereastraPrincipala):
         print('backToMainGUI')
         Form.deleteLater()

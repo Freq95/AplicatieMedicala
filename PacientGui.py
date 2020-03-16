@@ -1,9 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, QWidget, QMessageBox, QLineEdit, QApplication, QMessageBox, QSizePolicy
+from InterfataMainGUI import ShowMainGuiCallback, HideMainGuiCallback
 
 import ClasaDB, ClasaPacienti
 import ViewPacientGui, ProgramareGui, DocumentGui
-from InterfataMainGUI import ShowMainGuiCallback, HideMainGuiCallback
+import cssStyle
 
 def cnpToDataNasteriiAndSex(cnp):
     cnpValid = (len(cnp) == 13 or len(cnp) == 0) and (cnp.isdigit() or len(cnp) == 0)
@@ -158,6 +159,7 @@ class Pacient(object):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
         Form.setPalette(palette)
+        Form.setStyleSheet(cssStyle.css)
 
         self.gridLayout_3 = QtWidgets.QGridLayout(Form)
         self.gridLayout_3.setObjectName("gridLayout_3")
@@ -299,8 +301,8 @@ class Pacient(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Aplicatie Medicala"))
-        self.label_2.setText(_translate("Form", "Prenume"))
-        self.label_3.setText(_translate("Form", "Nume"))
+        self.label_2.setText(_translate("Form", "Nume"))
+        self.label_3.setText(_translate("Form", "Prenume"))
         self.label_4.setText(_translate("Form", "Telefon"))
         self.label_5.setText(_translate("Form", "CNP"))
         self.pushButton.setText(_translate("Form", "+ Pacient"))
@@ -308,7 +310,7 @@ class Pacient(object):
         self.pushButton_2.setText(_translate("Form", "Back"))
         self.pushButton_3.setText(_translate("Form", "Docs"))
         self.pushButton_4.setText(_translate("Form", "Programare"))
-        self.label_6.setText(_translate("Form", "Nume Pacient"))
+        self.label_6.setText(_translate("Form", "Cauta Pacient"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Form", "Programari"))
 
     def BackToMainGUI(self, Form, fereastraPrincipala):

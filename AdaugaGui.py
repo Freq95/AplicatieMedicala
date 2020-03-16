@@ -1,14 +1,6 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'D:\03_Projects\AplicatieMedicala\AdaugaGui.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.1
-#
-# WARNING! All changes made in this file will be lost!
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import cssStyle
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -125,6 +117,8 @@ class Ui_Form(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
         Form.setPalette(palette)
         Form.setWindowOpacity(1.0)
+        Form.setStyleSheet(cssStyle.css)
+
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.gridLayout = QtWidgets.QGridLayout()

@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, Q
 
 import PacientGui
 import ClasaDB, ClasaPacienti, ClasaProgramari, InterfataMainGUI
+import cssStyle
 
 class EditProgramare(object):
     def setupUi(self, Form, programarePacient, dataProgramare, fereastraPrincipala):
@@ -139,6 +140,8 @@ class EditProgramare(object):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
         Form.setPalette(palette)
+        Form.setStyleSheet(cssStyle.css)
+        
         self.gridLayout_3 = QtWidgets.QGridLayout(Form)
         self.gridLayout_3.setObjectName("gridLayout_3")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -249,7 +252,8 @@ class EditProgramare(object):
         self.label_5.setText(_translate("Form", "Telefon"))
         self.label_6.setText(_translate("Form", "Interventie"))
         self.label_7.setText(_translate("Form", "Programare"))
-
+        self.dateTimeEdit.setDisplayFormat(_translate("Form", "dd-MMM-yy hh:mm"))
+        
         for row in infoPacient:
             print('Populam campurile')
             self.lineEdit.setText(_translate("Form", row[2]))

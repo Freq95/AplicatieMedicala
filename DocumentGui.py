@@ -3,8 +3,10 @@ from PyQt5.QtWidgets import QListWidgetItem, QLabel, QHBoxLayout, QPushButton, Q
 from shutil import copy
 from PIL import Image
 
-import sys, os, pathlib, PyPDF2
+import sys, os, pathlib, PyPDF2, shutil
 import ClasaDocuments, ClasaDB
+import cssStyle
+
 
 class Document(object):
     def setupUi(self, Form, numePacient):
@@ -158,6 +160,7 @@ class Document(object):
       
         Form.setWindowTitle('Aplicatie Medicala')
         Form.setWindowOpacity(0.95)
+        Form.setStyleSheet(cssStyle.css)
 
         button.setGeometry(QtCore.QRect(0, 210, 401, 411))
 
@@ -196,6 +199,7 @@ class Button(QPushButton):
         listaFisiere = []
 
         for i in range(len(urls)):
+            
             if urls and urls[i].scheme() == 'file':
                 filepath = str(urls[i].path())[1:]
                 pacient = self.text()
@@ -209,9 +213,11 @@ class Button(QPushButton):
                 extension = extension[len(extension) - 1]
                 extension = extension.upper()
                 
+                if extension == "SL":
+                    slFile = 1
                 #check if the file format is correct
                 if (extension == "PDF" or extension == "JPG" or extension == "PNG" or extension == "JPEG" or extension == "BMP" or extension == "SL"):
-                    AdaugaDocumente(filepath, pacient)                    
+                    AdaugaDocumente(filepath, pacient, extension, fileName)                    
                     document = copiedFile
                     Document = ClasaDocuments.Documents(prenume, nume, document)
                     ClasaDB.AdaugaDocumentInDB(Document)                        
@@ -223,8 +229,17 @@ class Button(QPushButton):
 
                 else:
                     listaFisiere.append(fileName)
-
-        if contorFisiere == len(urls):
+        
+        contineSL = 0
+        
+        for fisiere in listaFisiere:
+            extension = fisiere.split('.')
+            extension = extension[len(extension) - 1]
+            extension = extension.upper()
+            if extension == "SL":
+                contineSL = 1
+        
+        if contorFisiere == len(urls) or contineSL == 1:
             dialog1 = QMessageBox()
             dialog1.setWindowTitle("Aplicatie Medicala")
             dialog1.setText("Adaugare cu succes.")
@@ -241,7 +256,7 @@ class Button(QPushButton):
             dialog2.setIcon(QMessageBox.Critical)
             dialog2.exec_()
 
-def AdaugaDocumente(fileSource, numePacient):    
+def AdaugaDocumente(fileSource, numePacient, extensie, fileName):    
     path = os.getcwd() # current path
     rootDirectory = path  + "\\DocumentePacienti"
     
@@ -266,5 +281,25 @@ def AdaugaDocumente(fileSource, numePacient):
         os.mkdir(pacientDirectory)
     
     # copy the file from source to destination
-    copy(fileSource, pacientDirectory)
+    if extensie == "SL":
+        pacientDirectory = pacientDirectory + "\\CT_" + fileName
+        folderExist = os.path.exists(pacientDirectory) 
+        if not folderExist:
+            copytree(fileSource, pacientDirectory)
+        else:
+            dialog2 = QMessageBox()
+            dialog2.setWindowTitle("Aplicatie Medicala")
+            dialog2.setText("Un CT cu acelasi nume exista.\n")
+            dialog2.setIcon(QMessageBox.Critical)
+            dialog2.exec_()
+    else:
+        copy(fileSource, pacientDirectory)
 
+def copytree(src, dst, symlinks=False, ignore=None):
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if os.path.isdir(s):
+            shutil.copytree(s, d, symlinks, ignore)
+        else:
+            shutil.copy2(s, d)
